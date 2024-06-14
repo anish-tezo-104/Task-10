@@ -1,0 +1,12 @@
+<div class="grid-container" #gridContainer>
+  <!--SideBar-->
+  <app-sidebar  [gridContainerRef]="gridContainerRef"></app-sidebar>
+  <div class="right-background">
+    <!--Header-->
+    <app-header ></app-header>
+    
+    <div id="displayWindow">
+      <router-outlet></router-outlet>
+    </div>
+  </div>
+</div>

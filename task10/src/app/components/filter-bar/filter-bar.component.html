@@ -1,0 +1,32 @@
+<div class="filter-container">
+  <div class="filter-container-left" id="filterContainerLeft">
+    <!-- Iterate over dropdowns array -->
+    <ng-container *ngFor="let dropdown of dropdowns">
+      <app-filter-dropdown
+        [options]="dropdown.options"
+        [selectedOptions]="getSelectedOptions(dropdown.filterType)"
+        [defaultText]="dropdown.defaultText"
+        (optionSelected)="selectOption($event, dropdown.filterType)"
+      ></app-filter-dropdown>
+    </ng-container>
+  </div>
+
+  <div class="filter-container-right">
+    <button
+      class="btn-reset"
+      (click)="resetFilter()"
+      [disabled]="isDisabled"
+      #btnReset
+    >
+      Reset
+    </button>
+    <button
+      class="btn-apply"
+      (click)="applyFilter()"
+      [disabled]="isDisabled"
+      #btnApply
+    >
+      Apply
+    </button>
+  </div>
+</div>

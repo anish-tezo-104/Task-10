@@ -1,0 +1,383 @@
+<section
+  [formGroup]="employeeForm"
+  id="addEmployeesContainer"
+  class="add-employees-page-container"
+>
+  <div class="add-employee-container">
+    <h1>{{ showEditPage ? "Edit Employee" : "Add Employee" }}</h1>
+    <form id="employeeForm" class="employee-form" [formGroup]="employeeForm">
+      <div class="profile-image-container" id="profileImageContainer">
+        <label for="profileImageInput">
+          <img
+            [src]="imagePreview"
+            alt="Default User Image"
+            class="profile-image-preview"
+            id="profileImagePreview"
+          />
+        </label>
+        <input
+          type="file"
+          id="profileImageInput"
+          #file
+            (change)="onFileSelected($event)"
+          name="profileImage"
+          accept="image/*"
+        />
+        <button
+          type="button"
+          id="addProfilePhotoButton"
+          class="upload-profile-pic-btn"
+          (click)="file.click()"
+        >
+          Upload Profile Picture
+        </button>
+      </div>
+      <div class="employee-form-profile-details">
+        <div class="personal-information-container">
+          <h2>Personal Information</h2>
+          <div class="personal-information">
+            <div class="first-section">
+              <div class="input-field-container">
+                <label for="empNo"
+                  >Emp No<span class="required-field">*</span></label
+                >
+                <input
+                  type="text"
+                  required
+                  id="empNo"
+                  name="empNo"
+                  formControlName="uid"
+                  placeholder="Employee Number"
+                />
+                <div
+                  class="error-message"
+                  *ngIf="
+                    employeeForm.controls['uid'].invalid &&
+                    (employeeForm.controls['uid'].touched ||
+                      employeeForm.controls['uid'].dirty)
+                  "
+                >
+                  <div
+                    class="error-message"
+                    *ngIf="employeeForm.controls['uid'].errors?.['required']"
+                  >
+                    &#9888; This field is required
+                  </div>
+                  <div
+                    class="error-message"
+                    *ngIf="employeeForm.controls['uid'].errors?.['pattern']"
+                  >
+                    &#9888; Invalid Employee Number!
+                  </div>
+                </div>
+              </div>
+              <div class="input-field-container" *ngIf="!showEditPage">
+                <label for="password"
+                  >Password<span class="required-field">*</span></label
+                >
+                <input
+                  type="password"
+                  required
+                  id="password"
+                  name="password"
+                  formControlName="password"
+                  placeholder="Password"
+                />
+                <div
+                  class="error-message"
+                  *ngIf="
+                    employeeForm.controls['password'].invalid &&
+                    (employeeForm.controls['password'].touched ||
+                      employeeForm.controls['password'].dirty)
+                  "
+                >
+                  <div
+                    class="error-message"
+                    *ngIf="employeeForm.controls['password'].errors?.['required']"
+                  >
+                    &#9888; This field is required
+                  </div>
+                  <div
+                    class="error-message"
+                    *ngIf="employeeForm.controls['password'].errors?.['pattern']"
+                  >
+                    &#9888; Invalid Password. Minimum 8 characters!
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="second-section">
+              <div class="input-field-container">
+                <label for="firstName"
+                  >First Name<span class="required-field">*</span></label
+                >
+                <input
+                  required
+                  type="text"
+                  id="firstName"
+                  name="firstName"
+                  placeholder="First Name"
+                  formControlName="firstName"
+                />
+                <div
+                  class="error-message"
+                  *ngIf="
+                    employeeForm.controls['firstName'].invalid &&
+                    (employeeForm.controls['firstName'].touched ||
+                      employeeForm.controls['firstName'].dirty)
+                  "
+                >
+                  <div
+                    class="error-message"
+                    *ngIf="employeeForm.controls['firstName'].errors?.['required']"
+                  >
+                    &#9888; This field is required
+                  </div>
+                </div>
+              </div>
+              <div class="input-field-container">
+                <label for="lastName"
+                  >Last Name<span class="required-field">*</span></label
+                >
+                <input
+                  required
+                  type="text"
+                  id="lastName"
+                  name="lastName"
+                  placeholder="Last Name"
+                  formControlName="lastName"
+                />
+                <div
+                  class="error-message"
+                  *ngIf="
+                    employeeForm.controls['lastName'].invalid &&
+                    (employeeForm.controls['lastName'].touched ||
+                      employeeForm.controls['lastName'].dirty)
+                  "
+                >
+                  <div
+                    class="error-message"
+                    *ngIf="employeeForm.controls['lastName'].errors?.['required']"
+                  >
+                    &#9888; This field is required
+                  </div>
+                </div>
+              </div>
+              <div class="input-field-container">
+                <label for="dob">Date of Birth</label>
+                <input
+                  type="date"
+                  id="dob"
+                  name="dob"
+                  class="date-input"
+                  placeholder="Select"
+                  formControlName="dob"
+                />
+              </div>
+            </div>
+          </div>
+
+          <div class="third-section">
+            <div class="input-field-container">
+              <label for="email"
+                >Email Id<span class="required-field">*</span></label
+              >
+              <input
+                required
+                type="email"
+                id="email"
+                name="email"
+                placeholder="Joe.j@Technover.com"
+                formControlName="email"
+              />
+              <div
+                class="error-message"
+                *ngIf="
+                  employeeForm.controls['email'].invalid &&
+                  (employeeForm.controls['email'].touched ||
+                    employeeForm.controls['email'].dirty)
+                "
+              >
+                <div
+                  class="error-message"
+                  *ngIf="employeeForm.controls['email'].errors?.['required']"
+                >
+                  &#9888; This field is required
+                </div>
+                <div
+                  class="error-message"
+                  *ngIf="employeeForm.controls['email'].errors?.['pattern']"
+                >
+                  &#9888; Invalid email!
+                </div>
+              </div>
+            </div>
+            <div class="input-field-container">
+              <label for="mobileNumber">Mobile Number</label>
+              <input
+                type="text"
+                id="mobileNumber"
+                name="mobileNumber"
+                placeholder="6878098367"
+                formControlName="mobileNumber"
+                appMobileNumberValidation
+              />
+
+              <div
+                class="error-message"
+                *ngIf="
+                  employeeForm.controls['mobileNumber'].invalid &&
+                  (employeeForm.controls['mobileNumber'].touched ||
+                    employeeForm.controls['mobileNumber'].dirty)
+                "
+              >
+                <span
+                  class="error-message"
+                  *ngIf="employeeForm.controls['mobileNumber'].errors?.['required']"
+                >
+                  &#9888; This field is required
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="employment-information-container">
+          <h2>Employment Information</h2>
+          <div class="employment-information">
+            <div class="first-section">
+              <div class="input-field-container">
+                <label for="joiningDate"
+                  >Joining Date<span class="required-field">*</span></label
+                >
+                <input
+                  required
+                  type="date"
+                  id="joiningDate"
+                  class="date-input"
+                  name="joiningDate"
+                  formControlName="joiningDate"
+                />
+                <div
+                  class="error-message"
+                  *ngIf="
+                    employeeForm.controls['joiningDate'].invalid &&
+                    (employeeForm.controls['joiningDate'].touched ||
+                      employeeForm.controls['joiningDate'].dirty)
+                  "
+                >
+                  <div
+                    class="error-message"
+                    *ngIf="employeeForm.controls['joiningDate'].errors?.['required']"
+                  >
+                    &#9888; This field is required
+                  </div>
+                </div>
+              </div>
+
+              <div class="input-field-container">
+                <label for="location">Location</label>
+                <select
+                  id="location"
+                  name="location"
+                  formControlName="locationId"
+                >
+                  <option value="null">Select location</option>
+                  <option
+                    [ngValue]="option.id"
+                    *ngFor="let option of locationOptions"
+                  >
+                    {{ option.name }}
+                  </option>
+                </select>
+              </div>
+            </div>
+            <div class="second-section">
+              <div class="input-field-container">
+                <label for="jobTitle">Job Title</label>
+                <select id="jobTitle" name="jobTitle" formControlName="roleId">
+                  <option value="null">Select job title</option>
+                  <option
+                    [ngValue]="option.roleId"
+                    *ngFor="let option of filteredRolesOptions"
+                    [disabled]="!departmentSelected"
+                  >
+                    {{ option.roleName }}
+                  </option>
+                </select>
+              </div>
+              <div class="input-field-container">
+                <label for="department">Department</label>
+                <select
+                  id="department"
+                  name="department"
+                  formControlName="departmentId"
+                  (change)="onDepartmentChange($event)"
+                >
+                  <option value="null">Select department</option>
+                  <option
+                    [ngValue]="option.id"
+                    *ngFor="let option of departmentOptions"
+                  >
+                    {{ option.name }}
+                  </option>
+                </select>
+              </div>
+            </div>
+            <div class="third-section">
+              <div class="input-field-container">
+                <label for="assignManager">Assign Manager</label>
+                <select
+                  id="assignManager"
+                  name="assignManager"
+                  formControlName="managerId"
+                >
+                  <option value="null">Select manager</option>
+                  <option
+                    [ngValue]="option.id"
+                    *ngFor="let option of managerOptions"
+                  >
+                    {{ option.name }}
+                  </option>
+                </select>
+              </div>
+              <div class="input-field-container">
+                <label for="assignProject">Assign Project</label>
+                <select
+                  id="assignProject"
+                  name="assignProject"
+                  formControlName="projectId"
+                >
+                  <option value="null">Select project</option>
+                  <option
+                    [ngValue]="option.id"
+                    *ngFor="let option of projectOptions"
+                  >
+                    {{ option.name }}
+                  </option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div class="form-buttons">
+            <button
+              type="button"
+              id="addEmployeesCancelButton"
+              (click)="onCancelForm()"
+            >
+              Cancel
+            </button>
+            <button
+              (click)="handleEmployeeFormSubmit()"
+              type="button"
+              id="addEmployeeButton"
+              [disabled]="employeeForm.invalid && !showEditPage"
+            >
+              {{ showEditPage ? "Edit Employee" : "Add Employee" }}
+            </button>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</section>

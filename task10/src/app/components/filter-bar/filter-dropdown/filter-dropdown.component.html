@@ -1,0 +1,13 @@
+<div class="dropdown dropdown" [class.active]="isOpen">
+  <button class="filter-btn dropbtn" (click)="toggleDropdown()">
+    <div>{{ selectedOptions.length > 0 ? selectedOptions.length + ' Selected' : defaultText }}</div>
+    <div class="keyboard-arrow-down-icon">
+      <span class="material-symbols-outlined keyboard-arrow-down-icon">keyboard_arrow_down</span>
+    </div>
+  </button>
+  <div class="dropdown-content">
+    <div *ngFor="let option of options" class="dropdown-options" [class.selected]="isSelected(option.id)" (click)="selectOption(option.id)">
+      {{ option.name }}
+    </div>
+  </div>
+</div>

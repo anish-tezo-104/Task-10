@@ -1,0 +1,109 @@
+<section id="addRoleContainer" class="add-role-page-container">
+  <div class="add-roles-container">
+    <div class="form-container">
+      <h1>Create New Role</h1>
+      <form
+        id="roleForm"
+        class="role-form"
+        [formGroup]="roleForm"
+      >
+        <div class="first-section">
+          <div class="role-details">
+            <div class="input-field-container">
+              <label for="roleName">Role Name</label>
+              <input
+                type="text"
+                id="roleName"
+                name="roleName"
+                placeholder="Enter a role name"
+                formControlName="roleName"
+              />
+              <div
+                class="error-message"
+                *ngIf="
+                  roleForm.controls['roleName'].invalid &&
+                  (roleForm.controls['roleName'].touched ||
+                    roleForm.controls['roleName'].dirty)
+                "
+              >
+                <div
+                  class="error-message"
+                  *ngIf="roleForm.controls['roleName'].errors?.['required']"
+                >
+                  &#9888; This field is required
+                </div>
+              </div>
+            </div>
+
+            <div class="input-field-container department">
+              <label for="department">Department</label>
+              <select
+                id="department"
+                name="department"
+                formControlName="departmentId"
+              >
+                <option value="null">Select department</option>
+                <option
+                  [ngValue]="option.id"
+                  *ngFor="let option of departmentOptions"
+                >
+                  {{ option.name }}
+                </option>
+              </select>
+              <div
+                class="error-message"
+                *ngIf="
+                  roleForm.controls['departmentId'].invalid &&
+                  (roleForm.controls['departmentId'].touched ||
+                    roleForm.controls['departmentId'].dirty)
+                "
+              >
+                <div
+                  class="error-message"
+                  *ngIf="roleForm.controls['roleName'].errors?.['required']"
+                >
+                  &#9888; This field is required
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="input-field-container description-area">
+            <label for="description">Description</label>
+            <textarea
+              rows="4"
+              cols="50"
+              name="description"
+
+            ></textarea>
+          </div>
+        </div>
+        <div class="add-roles second-section">
+          <div class="input-field-container location">
+            <label for="location">Location</label>
+            <select id="location" name="location" formControlName="locationId">
+              <option value="null">Select location</option>
+              <option
+                [ngValue]="option.id"
+                *ngFor="let option of locationOptions"
+              >
+                {{ option.name }}
+              </option>
+            </select>
+          </div>
+        </div>
+      </form>
+      <div class="form-buttons">
+        <button
+          type="button"
+          id="addRolesCancelButton"
+          (click)="roleForm.reset()"
+        >
+          Cancel
+        </button>
+        <button type="submit" id="submitAddRolesBtn" [disabled]="!validForm()" (click)="handleRoleFormSubmit()">
+          Add Role
+        </button>
+      </div>
+    </div>
+  </div>
+</section>

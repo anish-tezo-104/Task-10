@@ -1,0 +1,38 @@
+.export-button:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+}
+
+.export-button {
+    height: 2rem;
+    border: 2px solid #d8dbe0;
+    color: #8592a3;
+    margin-right: 1.2rem;
+}
+
+.export-button{
+    align-items: center;
+    display: flex;
+    font-weight: 500;
+    width: auto;
+    padding: 0 1rem;
+    font-size: 1rem;
+    border-radius: 0.5rem;
+    justify-content: center;
+}
+
+.arrow-turn-left-down-icon {
+    margin: 0 1rem;
+}
+
+.employees-page {
+    display: block;
+}
+
+.material-symbols-outlined.sort-icon {
+    font-size: 16px;
+}
+
+.table-container-space {
+    height: 25rem;
+}

@@ -1,0 +1,41 @@
+<section id="employeesContainer" class="employees-page-container">
+  <div class="employees-page">
+    <!--Functions Employees-->
+    <div class="function-container employees">
+      <div class="function-left">
+        <h5 class="heading">Employees</h5>
+        <div class="sub-heading">
+          Find all your company's employee account and their associated roles.
+        </div>
+      </div>
+      <div class="function-right">
+        <button class="export-button" (click)="exportEmployeesToCSV()">
+          <img
+            src="../assets/export-icon.svg"
+            alt="Export Icon"
+            class="export-icon"
+          />
+          <span>EXPORT</span>
+        </button>
+        <button
+          class="function-button function-add-employee-button"
+          routerLink="/AddEmployee"
+        >
+          <img src="../assets/add.svg" alt="Plus Icon" />
+          <span>ADD EMPLOYEE</span>
+        </button>
+      </div>
+    </div>
+    <!-- alph-sort -->
+    <app-alphabet-filter></app-alphabet-filter>
+    <!-- Filter-->
+    <app-filter-bar
+      [dropdowns]="filterConfig"
+      [selectedFilters]="selectedEmployeesFilters"
+    ></app-filter-bar>
+    <!--Employees Container-->
+    <div class="table-container-space">
+      <app-employee-table [employeesList]="employeesList"></app-employee-table>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,75 @@
+<!-- role-card.component.html -->
+
+<div class="roles-container-item">
+  <div class="roles-card">
+    <div class="roles-card-name">
+      <div class="role-name">{{ role.roleName }}</div>
+      <div class="edit-icon">
+        <img src="../assets/edit-icon.svg" alt="Edit Icon" />
+      </div>
+    </div>
+    <div class="role-card-details dept-name">
+      <div class="left">
+        <img src="../assets/team-icon.svg" class="team-icon" alt="Team Icon" />
+        <div>Department</div>
+      </div>
+      <div class="right">{{ role.departmentName }}</div>
+    </div>
+    <div class="role-card-details location-name">
+      <div class="left">
+        <img
+          src="../assets/location-icon.svg"
+          class="location-icon"
+          alt="Location Icon"
+        />
+        <div>Location</div>
+      </div>
+      <div class="right">{{ role.locationName }}</div>
+    </div>
+    <div class="role-card-details total-employees-count">
+      <div class="left">Total Employees</div>
+      <div class="right">
+        <div class="employee-count">
+          <ng-container *ngIf="role.employees.length <= 4; else moreThanFour">
+            <!-- Show images for each employee -->
+            <ng-container *ngFor="let employee of role.employees">
+              <img
+                src="../assets/profile.png"
+                alt="Employee"
+                class="employees-count-icon"
+              />
+            </ng-container>
+            <!-- Show the count -->
+            <span class="employees-count-circle">{{
+              role.employees.length
+            }}</span>
+          </ng-container>
+          <!-- If employees count is more than 4 -->
+          <ng-template #moreThanFour>
+            <!-- Show only 4 images -->
+            <ng-container *ngFor="let employee of role.employees.slice(0, 4)">
+              <img
+                src="../assets/profile.png"
+                alt="Employee"
+                class="employees-count-icon"
+              />
+            </ng-container>
+            <!-- Show the remaining count -->
+            <span class="employees-count-circle">
+              +{{ role.employees.length - 4 }}</span
+            >
+          </ng-template>
+        </div>
+      </div>
+    </div>
+    <div
+      class="role-card-details view-all-employees"
+      (click)="openRoleDescription()"
+    >
+      <div class="left">View all employees</div>
+      <div class="right-arrow-icon">
+        <img src="../assets/right-arrow.svg" alt="Arrow Right Icon" />
+      </div>
+    </div>
+  </div>
+</div>

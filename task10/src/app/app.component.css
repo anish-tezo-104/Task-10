@@ -1,0 +1,412 @@
+
+.toaster {
+  position: fixed;
+  display: flex;
+
+  align-items: center;
+  bottom: 1.2rem;
+  right: 1.2rem;
+  z-index: 9999;
+  min-width: 15rem;
+  padding: 16px;
+  border-radius: 8px;
+  color: #fff;
+  font-family: Arial, sans-serif;
+  box-sizing: border-box;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0s linear 0.3s;
+}
+
+.toaster-close-btn {
+  margin-right: 0.6rem;
+}
+
+.toaster-close-btn:hover {
+  cursor: pointer;
+}
+
+.toaster.show {
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 0.3s ease, visibility 0s linear;
+}
+
+.toaster.success {
+  background-color: #379D00;
+}
+
+.toaster.error {
+  background-color: #D81A1A;
+}
+
+.toaster.warning {
+  background-color: #f0c129;
+}
+
+
+h4 {
+  font-size: 1rem;
+}
+
+.material-icons-outlined {
+  vertical-align: middle;
+  line-height: 1px;
+}
+
+.material-symbols-outlined.collapsed {
+  display: block;
+}
+
+.material-symbols-outlined.expand {
+  display: none;
+}
+
+.keyboard-arrow-down-icon{
+  line-height: 2;
+}
+
+.right-background {
+  background-color: #f5f5f538;
+  width: 100%;
+  height: 100vh;
+  overflow: scroll;
+}
+
+.grid-container {
+  display: grid;
+  grid-template-columns: 20% 80%;
+  grid-template-rows: 0.2fr 0.2fr 0.2fr 3fr 3fr;
+  grid-template-areas:
+    "sidebar header"
+    "sidebar function"
+    "sidebar function"
+    "sidebar alph-sort"
+    "sidebar filter"
+    "sidebar employees"
+    "sidebar roles";
+  height: 100vh;
+  position: relative;
+}
+
+.menu-icon {
+  display: none;
+}
+
+.coming-soon-message {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+
+/** Functions */
+
+.function-button:hover {
+  background-color: #f77575;
+  cursor: pointer;
+}
+
+.function-left .heading {
+  font-size: 1.2rem;
+  margin-top: 0;
+  color: #536576;
+  margin-bottom: 0.6rem;
+  font-weight: bold;
+}
+
+.function-left .sub-heading {
+  font-size: 1.1rem;
+  color: #536576af;
+  font-weight: 500;
+}
+
+.function-left {
+  margin-right: 0.5rem;
+}
+
+.function-container {
+  grid-area: function;
+  margin: 0.5rem 1rem 1rem 2rem;
+  display: flex;
+  grid-area: function;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.roles-desc-1 .heading span {
+  margin: 1rem;
+}
+
+.roles-desc-2 {
+  margin-top: 1rem !important;
+}
+
+.function-button {
+    align-items: center;
+    display: flex;
+    font-weight: 500;
+    width: auto;
+    padding: 0 1rem;
+    font-size: 1rem;
+    border-radius: 0.5rem;
+    justify-content: center;
+}
+
+.function-container .sub-heading {
+  line-height: 1.4rem;
+  color: #A5ADB7;
+}
+
+.function-right {
+  display: flex;
+  align-items: center;
+}
+
+.function-button img {
+  margin-right: 5px;
+}
+
+.function-button {
+  height: 2.5rem;
+  width: 14rem;
+  border: none;
+  color: white;
+  background-color: #f44848;
+}
+
+.export-icon {
+  margin-right: 0.5rem;
+}
+
+.filter-list-icon {
+  margin: 0 4px;
+}
+
+::-webkit-scrollbar {
+  height: 4px;
+  width: 5px;
+}
+
+::-webkit-scrollbar-track {
+  background-color: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  border-radius: 20px;
+  background-color: #f44848;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: #f46a6a;
+}
+
+.pagination-container {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    margin-left: 2rem;
+    width: max-content;
+}
+
+.pagination-container button {
+    background-color: #f44848;
+    border: none;
+    color: white;
+    padding: 0.3rem;
+    margin: 0 5px;
+    border-radius: 5px;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.pagination-container button:disabled {
+    background-color: #f89191 !important;
+    color: white !important;
+    cursor: not-allowed;
+}
+
+.pagination-container span {
+    font-size: 0.9rem;
+    margin: 0 0.8rem;
+    width: max-content;
+}
+
+.pagination-container .material-symbols-outlined {
+    font-size: 1.2rem;
+}
+
+.pagination-container select {
+    padding: 0.3rem 1rem;
+    margin-left: 0.8rem;
+    border-radius: 5px;
+    font-size: 0.9rem;
+}
+
+@media only screen and (min-width:1200px) {
+  body {
+    font-size: 1rem;
+  }
+}
+
+@media only screen and (max-width:1200px) {
+  body {
+    font-size: 0.9rem;
+  }
+
+  .header {
+    height: 3.5rem;
+  }
+
+  .sub-sec.unlocked.active .sub-sec-right {
+    display: none !important;
+  }
+
+  .alph-sort {
+    flex-direction: column !important;
+  }
+
+  .alphabets-container {
+    flex-wrap: wrap;
+    justify-content: center !important;
+  }
+
+}
+
+@media only screen and (max-width:1000px) {
+
+
+  .burger-container {
+    display: flex !important;
+  }
+
+  .header-icons {
+    display: none !important;
+  }
+
+  .sub-sec.unlocked.active .sub-sec-right {
+    display: none !important;
+  }
+}
+
+@media only screen and (min-width:901px) {
+  .grid-container {
+    grid-template-columns: 20% 80%;
+
+  }
+}
+
+@media only screen and (max-width:900px) {
+
+
+
+  .function-button {
+    height: 2rem;
+    font-size: 0.8rem;
+  }
+
+  .header .profile-card {
+    display: none !important;
+  }
+
+  .header {
+    height: 2.5rem;
+  }
+
+  .grid-container {
+    grid-template-columns: 100% !important;
+    grid-template-areas:
+      "header"
+      "sidebar"
+      "function"
+      "function"
+      "alph-sort"
+      "filter"
+      "employees"
+      "roles";
+  }
+}
+
+@media only screen and (max-width: 768px) {
+
+  .alph-btn {
+    width: 1.5rem;
+    height: 2rem;
+    margin: 0.3rem 0.2rem;
+  }
+
+  .th span:nth-child(1) {
+    font-size: 0.5rem;
+  }
+
+  .col {
+    width: auto !important;
+  }
+
+
+  .export-button {
+    transform: scale(0.8);
+  }
+
+
+  .function-button {
+    transform: scale(1);
+
+  }
+
+  .function-button span {
+    font-size: 0.8rem !important;
+  }
+
+  .sub-sec.unlocked.active .sub-sec-right {
+    display: none !important;
+  }
+}
+
+@media only screen and (max-width: 710px) {
+  .function-button span {
+    font-size: 0.7rem !important;
+  }
+
+  .roles-container {
+    justify-content: center;
+  }
+
+  .roles-card {
+    margin: auto;
+  }
+
+
+  .function-left {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 1rem;
+    text-align: center;
+  }
+}
+
+@media only screen and (max-width:1090px) {
+  .update-btn {
+    transform: scale(0.9);
+    margin-right: 0;
+  }
+
+  .update-buttons {
+    justify-content: center;
+  }
+
+  .update-content {
+    padding: 1rem 0;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .update-message-text {
+    text-align: center;
+  }
+}

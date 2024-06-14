@@ -1,0 +1,45 @@
+.alph-sort {
+    grid-area: alph-sort;
+    z-index: 1;
+}
+
+.alph-btn {
+    height: 2.4rem;
+    width: 2.2rem;
+    text-align: center;
+    display: flex;
+    border-radius: 6px;
+    justify-content: center;
+    align-items: center;
+    background-color: #eaebee;
+    margin: 0.2rem 0.2rem;
+}
+
+.alph-btn:hover {
+    background-color: #f44848;
+    color: white;
+    cursor: pointer;
+}
+
+.alph-btn.active {
+    color: white;
+    transform: scale(1.2);
+    background-color: #f44848;
+}
+
+.alph-sort {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    align-items: center;
+    margin-left: 1.5rem;
+    padding-right: 1rem;
+}
+
+.alphabets-container {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: space-around;
+}
+

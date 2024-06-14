@@ -1,0 +1,207 @@
+<nav class="sidebar active"  id="sidebarContainer" #sidebar>
+  <div>
+    <div class="profile-card" (click)="toggleSideBar()">
+      <div class="profile-pic-container">
+        <img
+          src="../assets/profile.png"
+          alt="Profile Image"
+          class="profile-img"
+        />
+        <div class="status-circle online"></div>
+      </div>
+      <div class="profile-details">
+        <p class="profile-name">Jhon Abraham</p>
+        <p class="profile-role">Admin</p>
+      </div>
+    </div>
+    <div class="sidebar-top">
+      <div class="company-logo-area">
+        <div class="sidebar-brand">
+          <div class="tezo-logo">
+            <img src="../assets/TezoLogo.svg" alt="Tezo Logo" />
+          </div>
+        </div>
+      </div>
+      <div
+        class="sidebar-handle-icon"
+        (click)="toggleSideBar()"
+        #sidebarHandleIcon
+      >
+        <img
+          src="../assets/handle.png"
+          alt="Sidebar Handle Icon"
+          #sidebarHandleIcon
+        />
+      </div>
+    </div>
+    <div class="sidebar-list">
+      <div class="all-section">
+        <div class="underline-heading-container">
+          <div class="underline"></div>
+          <div class="sidebar-list-heading">ALL</div>
+        </div>
+        <div class="sub-section">
+          <a
+            class="sub-sec dashboard item unlocked"
+            routerLink="/Dashboard"
+            #subSec
+            (click)="toggleSubSecClass($event, 'dashboard')"
+          >
+            <div class="sub-sec-left">
+              <div class="sub-sec-left-left">
+                <div
+                  class="dashboard-icon-container sidebar-icons icon-roles"
+                ></div>
+                <h4>Dashboard</h4>
+              </div>
+              <div class="expand-collapsed-icons">
+                <span class="material-symbols-outlined collapsed">
+                  chevron_right
+                </span>
+                <span class="material-symbols-outlined expand">
+                  keyboard_arrow_down
+                </span>
+              </div>
+            </div>
+            <div class="sub-sec-right"></div>
+          </a>
+          <a
+            class="sub-sec employees item unlocked"
+            routerLink="/Employees"
+            #subSec
+            #subSecEmployees
+            (click)="toggleSubSecClass($event, 'employees')"
+          >
+            <div class="sub-sec-left">
+              <div class="sub-sec-left-left">
+                <div
+                  class="employees-icon-container sidebar-icons icon-roles"
+                ></div>
+                <h4>Employees</h4>
+              </div>
+              <div class="expand-collapsed-icons">
+                <span class="material-symbols-outlined collapsed">
+                  chevron_right
+                </span>
+                <span class="material-symbols-outlined expand">
+                  keyboard_arrow_down
+                </span>
+              </div>
+            </div>
+            <div class="sub-sec-right"></div>
+          </a>
+          <div class="departments" #departmentsList>
+            <div class="department-sub-lists sub-lists">
+              <ul id="departmentList">
+                @for(group of employeesGroupedByDepartment; track
+                group.departmentId) {
+                <li>
+                  <a href="#">
+                    <div class="dept-details">
+                      <div class="dept-names">
+                        {{ getDepartmentNameById(group.departmentId) }}
+                      </div>
+                      <!-- Display department name -->
+                      <div class="employee-dept-count">
+                        {{ group.employeesCount }}
+                      </div>
+                      <!-- Hardcoded number of employees -->
+                    </div>
+                  </a>
+                </li>
+                }
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="management-section">
+      <div class="underline-heading-container">
+        <div class="underline"></div>
+        <div class="sidebar-list-heading">ROLES/USER MANAGEMENT</div>
+      </div>
+      <div class="management-sub-section active">
+        <a
+          class="sub-sec roles item unlocked"
+          routerLink="/Roles"
+          #subSec
+          (click)="toggleSubSecClass($event, 'roles')"
+        >
+          <div class="sub-sec-left">
+            <div class="sub-sec-left-left">
+              <!-- <span class="icon-roles-container icon-roles sidebar-roles-icon"></span> -->
+              <img
+                src="../../../assets/roles-{{ sectionStates['roles'] ? 'red' : 'grey' }}.svg"
+                class="sidebar-roles-icon"
+                alt="Roles Icon"
+                #sidebarRolesIcon
+              />
+              <img
+                src="../assets/bx-lock.png"
+                alt="Lock Icon"
+                class="sidebar-lock-icon"
+              />
+              <h4>Roles</h4>
+            </div>
+            <div class="expand-collapsed-icons">
+              <span class="material-symbols-outlined collapsed">
+                chevron_right
+              </span>
+              <span class="material-symbols-outlined expand">
+                keyboard_arrow_down
+              </span>
+            </div>
+          </div>
+          <div class="sub-sec-right"></div>
+        </a>
+        <a
+          class="sub-sec access-rights item unlocked"
+          routerLink="/AccessUsers"
+          #subSec
+          (click)="toggleSubSecClass($event, 'assignUser')"
+        >
+          <div class="sub-sec-left">
+            <div class="sub-sec-left-left">
+              <img
+                src="../../../assets/assign-user-{{ sectionStates['assignUser'] ? 'red' : 'grey' }}.svg"
+                alt="Assign User Icon"
+                class="sidebar-assign-user-icon"
+                #sidebarAssignUserIcon
+              />
+              <img
+                src="../assets/bx-lock.png"
+                alt="Lock Icon"
+                class="sidebar-lock-icon"
+              />
+              <h4>Access rights</h4>
+            </div>
+            <div class="expand-collapsed-icons">
+              <span class="material-symbols-outlined collapsed">
+                chevron_right
+              </span>
+              <span class="material-symbols-outlined expand">
+                keyboard_arrow_down
+              </span>
+            </div>
+          </div>
+          <div class="sub-sec-right"></div>
+        </a>
+      </div>
+    </div>
+  </div>
+  <div class="update-message active">
+    <div class="update-content">
+      <div class="update-message-heading">Install new update 2.3.1A</div>
+      <div class="update-message-text">
+        <p>Allow to launch the new update for the AD application</p>
+      </div>
+      <div class="update-buttons">
+        <button class="update-btn btn-dismiss" (click)="handleUpdateDismiss()">
+          Dismiss
+        </button>
+        <button class="update-btn btn-accept">Accept</button>
+      </div>
+    </div>
+  </div>
+</nav>

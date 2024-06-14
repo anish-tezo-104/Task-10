@@ -1,0 +1,53 @@
+<section id="viewEmployeeContainer" class="view-employee-page-container">
+  <div class="view-employee-container">
+    <div class="employee-details">
+      <div class="personal-details">
+        <h2>Personal Information</h2>
+        <div class="detail">
+          <div class="label">Employee Number</div>
+          <div class="value">{{employee?.uid || 'N/A'}}</div>
+        </div>
+        <div class="detail">
+          <div class="label">First Name</div>
+          <div class="value">{{employee?.firstName || 'N/A'}}</div>
+        </div>
+        <div class="detail">
+          <div class="label">Last Name</div>
+          <div class="value">{{employee?.lastName || 'N/A'}}</div>
+        </div>
+        <div class="detail">
+          <div class="label">Date of Birth</div>
+          <div class="value">{{ employee?.dob ? (employee?.dob | date: "MM/dd/YYYY") :'N/A'}}  </div>
+        </div>
+      </div>
+      <div class="employment-details">
+        <h2>Employment Information</h2>
+        <div class="detail">
+          <div class="label">Joining Date</div>
+          <div class="value">{{ employee?.joiningDate ? (employee.joiningDate | date: 'MM/dd/yyyy') : 'N/A' }}</div>
+
+        </div>
+        <div class="detail">
+          <div class="label">Location</div>
+          <div class="value">{{employee.locationName || 'N/A'}}</div>
+        </div>
+        <div class="detail">
+          <div class="label">Job Title</div>
+          <div class="value">{{employee.roleName || 'N/A'}}</div>
+        </div>
+        <div class="detail">
+          <div class="label">Department</div>
+          <div class="value">{{employee.departmentName || 'N/A'}}</div>
+        </div>
+        <div class="detail">
+          <div class="label">Assign Manager</div>
+          <div class="value">{{employee.managerName || 'N/A'}}</div>
+        </div>
+        <div class="detail">
+          <div class="label">Assign Project</div>
+          <div class="value">{{employee.projectName || 'N/A'}}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

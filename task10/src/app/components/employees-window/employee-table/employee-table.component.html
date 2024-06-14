@@ -1,0 +1,206 @@
+<div class="employees-container">
+  <div class="above-section-table">
+    <div class="above-section-content">
+      <div class="above-section-left">
+        <div class="arrow-turn-left-down-icon">
+          <img
+            src="../assets/arrow-turn-left-down.svg"
+            alt="Arrow Turn Left Down Icon"
+          />
+        </div>
+        <div class="delete-button">
+          <button class="btn-delete" (click)="deleteSelectedEmployees()">
+            Delete
+          </button>
+        </div>
+        <!--Pagination-->
+        <div class="pagination-container">
+          <button (click)="changePage(1)" [disabled]="pageNumber === 1">
+            <span class="material-symbols-outlined">
+              keyboard_double_arrow_left
+            </span>
+          </button>
+          <button
+            (click)="changePage(pageNumber - 1)"
+            [disabled]="pageNumber === 1"
+          >
+            <span class="material-symbols-outlined"> arrow_left_alt </span>
+          </button>
+          <span>Page {{ pageNumber }}</span>
+          <button
+            (click)="changePage(pageNumber + 1)"
+            [disabled]="employeesList.length < pageSize"
+          >
+            <span class="material-symbols-outlined"> arrow_right_alt</span>
+          </button>
+          <select (change)="changePageSize($event)">
+            <option [value]="5" [selected]="pageSize === 5">5</option>
+            <option [value]="10" [selected]="pageSize === 10">10</option>
+            <option [value]="20" [selected]="pageSize === 20">20</option>
+            <option [value]="50" [selected]="pageSize === 50">50</option>
+          </select>
+        </div>
+      </div>
+      <div class="above-section-right">
+        <img
+          src="../assets/table-add.svg"
+          class="table-add-icon"
+          alt="Table Add Icon"
+        />
+      </div>
+    </div>
+  </div>
+  <div class="table-container">
+    <div
+      *ngIf="isLoading && employeesList.length === 0"
+      class="loading-message"
+    >
+      Loading...
+    </div>
+    <table
+      *ngIf="!isLoading && employeesList.length > 0"
+      class="employees-table"
+      id="employeesTable"
+    >
+      <thead>
+        <tr>
+          <th class="check-box-col">
+            <input
+              type="checkbox"
+              (change)="selectAll($event)"
+              id="all-checkbox"
+            />
+          </th>
+          <th class="col col-user">
+            <div class="header-content">
+              <span>USER</span>
+              <span class="material-symbols-outlined sort-icon"
+                >unfold_more</span
+              >
+            </div>
+          </th>
+          <th class="col col-location">
+            <div class="header-content">
+              <span>LOCATION</span>
+              <span class="material-symbols-outlined sort-icon"
+                >unfold_more</span
+              >
+            </div>
+          </th>
+          <th class="col col-department">
+            <div class="header-content">
+              <span>DEPARTMENT</span>
+              <span class="material-symbols-outlined sort-icon"
+                >unfold_more</span
+              >
+            </div>
+          </th>
+          <th class="col col-role">
+            <div class="header-content">
+              <span>ROLE</span>
+              <span class="material-symbols-outlined sort-icon"
+                >unfold_more</span
+              >
+            </div>
+          </th>
+          <th class="col col-emp-no">
+            <div class="header-content">
+              <span>EMP NO</span>
+              <span class="material-symbols-outlined sort-icon"
+                >unfold_more</span
+              >
+            </div>
+          </th>
+          <th class="col col-status">
+            <div class="header-content">
+              <span>STATUS</span>
+              <span class="material-symbols-outlined sort-icon"
+                >unfold_more</span
+              >
+            </div>
+          </th>
+          <th class="col col-join-dt">
+            <div class="header-content">
+              <span>JOIN DT</span>
+              <span class="material-symbols-outlined sort-icon"
+                >unfold_more</span
+              >
+            </div>
+          </th>
+          <th>
+            <span class="material-symbols-outlined">more_horiz</span>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let employee of employeesList">
+          <td class="check-box-col">
+            <input
+              type="checkbox"
+              [checked]="isEmployeeSelected(employee.id)"
+              (change)="toggleEmployeeSelection(employee.id)"
+            />
+          </td>
+          <td class="col col-user">
+            <div class="profile-card emp-card">
+              <!-- <img alt="Employee Image" class="employee-img" /> -->
+              <div class="profile-details">
+                <p class="profile-name">
+                  {{ employee.firstName || "N/A" }}
+                  {{ employee.lastName || "N/A" }}
+                </p>
+                <p class="profile-email">{{ employee.email || "N/A" }}</p>
+              </div>
+            </div>
+          </td>
+          <td class="col col-location">{{ employee.locationName || "N/A" }}</td>
+          <td class="col col-department">
+            {{ employee.departmentName || "N/A" }}
+          </td>
+          <td class="col col-role">{{ employee.roleName || "N/A" }}</td>
+          <td class="col col-emp-no">{{ employee.uid || "N/A" }}</td>
+          <td class="col col-status">
+            <div class="btn-active">
+              {{ employee.status ? "Active" : "Inactive" }}
+            </div>
+          </td>
+          <td class="col col-join-dt">
+            {{
+              employee.joiningDate
+                ? (employee.joiningDate | date : "MM/dd/YYYY")
+                : "N/A"
+            }}
+          </td>
+          <td>
+            <span
+              class="material-symbols-outlined ellipsis-icon"
+              (click)="toggleMenu(employee.id)"
+              >more_horiz</span
+            >
+            <div
+              class="ellipsis-menu"
+              [class.active]="isMenuOpen(employee.id)"
+              #ellipsisMenu
+            >
+              <ul>
+                <li [routerLink]="['/Details', employee.id]">
+                  <a>View Details</a>
+                </li>
+                <li [routerLink]="['/Edit', employee.id]"><a>Edit</a></li>
+                <li>
+                  <a (click)="deleteEmployee(employee)">Delete</a>
+                </li>
+              </ul>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <div
+      *ngIf="!isLoading && employeesList.length === 0"
+      class="empty-table-message active"
+    >
+      No employees found.
+    </div>
+  </div>
+</div>

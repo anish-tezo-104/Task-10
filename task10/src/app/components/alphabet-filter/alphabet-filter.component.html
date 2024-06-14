@@ -1,0 +1,21 @@
+<div class="alph-sort active">
+  <div class="filter-icon">
+    <span class="icon-filter" *ngIf="!isFilterApplied()">
+      <img src="../../../assets/filter-black.svg" alt="Filter Icon">
+    </span>
+    <span class="icon-filter" *ngIf="isFilterApplied()">
+      <img src="../../../assets/filter-red.svg" alt="Filter Icon">
+    </span>
+  </div>
+  <div class="alphabets-container" id="alphabetsContainer">
+    <div
+      *ngFor="let alphabet of alphabetArray; let i = index"
+      class="alph-btn"
+      #alphBtn
+      [ngClass]="'btn-' + alphabet.toLowerCase()"
+      (click)="alphabetButtonOnClick(i)"
+    >
+      {{ alphabet }}
+    </div>
+  </div>
+</div>

@@ -1,14 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { Dropdown } from '../../models/dropdown';
-import { LocalStorageServiceService } from '../../services/local-storage-service.service';
+import { LocalStorageService } from '../../services/local-storage.service';
 import { CommonModule } from '@angular/common';
-import { Role } from '../../models/role';
-import { DropdownsService } from '../../services/dropdowns.service';
-import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms'; // Import FormGroup and FormControl
-import { EmployeesService } from '../../services/employees.service';
+import { FormControl, FormGroup,  ReactiveFormsModule, Validators } from '@angular/forms'; 
 import { MobileNumberValidationDirective } from '../../directives/mobile-number-validation.directive';
-import { ActivatedRoute, Router } from '@angular/router';
-import { EditEmployee } from '../../models/edit-employee';
+import {  Router } from '@angular/router';
 import { RolesService } from '../../services/roles.service';
 
 
@@ -25,10 +21,7 @@ export class RoleFormComponent implements OnInit {
   departmentOptions: Dropdown[] = [];
 
   constructor(
-    private localStorageService: LocalStorageServiceService,
-    private dropdownsService: DropdownsService,
-    private employeesService: EmployeesService,
-    private route: ActivatedRoute,
+    private localStorageService: LocalStorageService,
     private router: Router,
     private roleService: RolesService
   ) {
@@ -42,8 +35,8 @@ export class RoleFormComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.locationOptions = this.localStorageService.getItem('locationOptions');
-    this.departmentOptions = this.localStorageService.getItem('departmentOptions');
+    this.locationOptions = JSON.parse(localStorage.getItem('locationOptions') || '[]');
+    this.departmentOptions = JSON.parse(localStorage.getItem('departmentOptions') || '[]');
   }
 
   handleRoleFormSubmit(): void {

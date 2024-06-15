@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { Dropdown } from '../../models/dropdown';
-import { LocalStorageServiceService } from '../../services/local-storage-service.service';
 import { CommonModule } from '@angular/common';
 import { Role } from '../../models/role';
 import { DropdownsService } from '../../services/dropdowns.service';
@@ -8,7 +7,6 @@ import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } 
 import { EmployeesService } from '../../services/employees.service';
 import { MobileNumberValidationDirective } from '../../directives/mobile-number-validation.directive';
 import { ActivatedRoute, Router } from '@angular/router';
-import { EditEmployee } from '../../models/edit-employee';
 
 
 @Component({
@@ -35,7 +33,6 @@ export class EmployeeFormComponent implements OnInit {
   imagePreview: string | ArrayBuffer | null = '../assets/default-user.png'
 
   constructor(
-    private localStorageService: LocalStorageServiceService,
     private dropdownsService: DropdownsService,
     private employeesService: EmployeesService,
     private route: ActivatedRoute,
@@ -63,9 +60,11 @@ export class EmployeeFormComponent implements OnInit {
 
   ngOnInit(): void {
 
-    this.rolesOptions = this.localStorageService.getItem('rolesOptions');
-    this.locationOptions = this.localStorageService.getItem('locationOptions');
-    this.departmentOptions = this.localStorageService.getItem('departmentOptions'); this.loadManagersList();
+    this.rolesOptions = JSON.parse(localStorage.getItem('rolesOptions') || '[]');
+    this.locationOptions = JSON.parse(localStorage.getItem('locationOptions') || '[]');
+    this.departmentOptions = JSON.parse(localStorage.getItem('departmentOptions') || '[]');
+
+    this.loadManagersList();
     this.loadProjectsList();
 
     this.route.params.subscribe(params => {

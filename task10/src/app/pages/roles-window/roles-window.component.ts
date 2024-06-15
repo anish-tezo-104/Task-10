@@ -1,10 +1,10 @@
 import { Component, inject } from '@angular/core';
-import { FilterBarComponent } from '../filter-bar/filter-bar.component';
+import { FilterBarComponent } from '../../components/filter-bar/filter-bar.component';
 import { ROLE_FILTER_CONFIG } from '../../config/role-filter.config';
 import { Dropdown } from '../../models/dropdown';
-import { LocalStorageServiceService } from '../../services/local-storage-service.service';
+import { LocalStorageService} from '../../services/local-storage.service';
 import { SharedService } from '../../services/shared.service';
-import { RoleCardComponent } from '../role-card/role-card.component';
+import { RoleCardComponent } from '../../components/role-card/role-card.component';
 import { Role } from '../../models/role';
 import { createDefaultSelectedRolesFilter, SelectedRolesFilter } from '../../models/selected-roles-filter';
 import { RolesService } from '../../services/roles.service';
@@ -16,7 +16,7 @@ import { RouterModule } from '@angular/router';
   standalone: true,
   imports: [FilterBarComponent, RoleCardComponent, CommonModule, RouterModule],
   templateUrl: './roles-window.component.html',
-  styleUrls: ['./roles-window.component.css', '../../app.component.css', '../filter-bar/filter-bar.component.css']
+  styleUrls: ['./roles-window.component.css',  '../home/home.component.css']
 })
 export class RolesWindowComponent {
 
@@ -33,12 +33,12 @@ export class RolesWindowComponent {
 
   sharedService = inject(SharedService);
   roleService = inject(RolesService);
-  localStorageService = inject(LocalStorageServiceService);
+  localStorageService = inject(LocalStorageService);
 
 
   ngOnInit(): void {
-    this.locationOptions = this.localStorageService.getItem('locationOptions');
-    this.departmentOptions = this.localStorageService.getItem('departmentOptions');
+    this.locationOptions = JSON.parse(localStorage.getItem('locationOptions') || '[]');
+    this.departmentOptions = JSON.parse(localStorage.getItem('departmentOptions') || '[]');
 
     this.filterConfig[0].options = this.departmentOptions;
     this.filterConfig[1].options = this.locationOptions;

@@ -6,7 +6,7 @@ import { SharedService } from '../../services/shared.service';
   standalone: true,
   imports: [],
   templateUrl: './header.component.html',
-  styleUrls: ['./header.component.css', '../../app.component.css']
+  styleUrls: ['./header.component.css', '../../pages/home/home.component.css']
 })
 export class HeaderComponent  {
   @ViewChild('sidebar') sidebar!: ElementRef;

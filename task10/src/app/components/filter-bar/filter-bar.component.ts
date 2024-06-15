@@ -1,6 +1,5 @@
 import { Component, ElementRef, inject, Input, OnInit, Output, QueryList, SimpleChanges, ViewChild, ViewChildren } from '@angular/core';
-import { LocalStorageServiceService } from '../../services/local-storage-service.service';
-import { Dropdown } from '../../models/dropdown';
+import { LocalStorageService } from '../../services/local-storage.service';
 import { CommonModule } from '@angular/common';
 import {  createDefaultSelectedEmployeesFilter, SelectedEmployeesFilter } from '../../models/selected-employees-filter';
 import { SharedService } from '../../services/shared.service';
@@ -16,7 +15,7 @@ import { createDefaultSelectedRolesFilter, SelectedRolesFilter } from '../../mod
     standalone: true,
     imports: [CommonModule, AlphabetFilterComponent, FilterDropdownComponent],
     templateUrl: './filter-bar.component.html',
-    styleUrls: ['./filter-bar.component.css', '../../app.component.css']
+    styleUrls: ['./filter-bar.component.css', '../../pages/home/home.component.css']
 })
 export class FilterBarComponent implements OnInit {
     @Input() dropdowns: FilterDropdownConfig[] = [];
@@ -42,7 +41,7 @@ export class FilterBarComponent implements OnInit {
     @ViewChildren('dropdownContent') dropdownContents!: QueryList<ElementRef<HTMLDivElement>>;
     @ViewChild('alphabetFilter') alphabetFilter!: ElementRef<any>;
 
-    constructor(private localStorageService: LocalStorageServiceService) {
+    constructor(private localStorageService: LocalStorageService) {
     }
 
     sharedService = inject(SharedService);

@@ -1,7 +1,7 @@
 import { Component, ElementRef, Input, Output, ViewChild } from '@angular/core';
 import { Employee } from '../../../models/employee';
 import { CommonModule } from '@angular/common';
-import { FilterBarComponent } from '../../filter-bar/filter-bar.component';
+import { FilterBarComponent } from '../../../components/filter-bar/filter-bar.component';
 import { SharedService } from '../../../services/shared.service';
 import { EmployeesService } from '../../../services/employees.service';
 import { RouterModule } from '@angular/router';
@@ -13,7 +13,7 @@ import { createDefaultSelectedEmployeesFilter, SelectedEmployeesFilter } from '.
   standalone: true,
   imports: [CommonModule, FilterBarComponent, RouterModule],
   templateUrl: './employee-table.component.html',
-  styleUrls: ['./employee-table.component.css', '../employees-window.component.css' , '../../../app.component.css']
+  styleUrls: ['./employee-table.component.css', '../employees-window.component.css' , '../../home/home.component.css']
 })
 export class EmployeeTableComponent {
   @Input() employeesList: Employee[] = [];

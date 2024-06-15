@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, OnDestroy, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
+import { Component, ElementRef, inject, Input, OnDestroy, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { SharedService } from '../../services/shared.service';
 import { DropdownsService } from '../../services/dropdowns.service';
@@ -8,6 +8,7 @@ import { Employee } from '../../models/employee';
 import { EmployeesService } from '../../services/employees.service';
 import { DepartmentEmployeeGroup } from '../../models/department-employee-group';
 import { Router, RouterModule } from '@angular/router';
+import { LocalStorageService } from '../../services/local-storage.service';
 
 
 @Component({
@@ -15,7 +16,7 @@ import { Router, RouterModule } from '@angular/router';
   standalone: true,
   imports: [CommonModule, RouterModule],
   templateUrl: './sidebar.component.html',
-  styleUrls: ['./sidebar.component.css', '../header/header.component.css', '../../app.component.css']
+  styleUrls: ['./sidebar.component.css', '../header/header.component.css', '../../pages/home/home.component.css']
 })
 export class SidebarComponent implements OnInit {
   departments: Dropdown[] = [];
@@ -27,7 +28,9 @@ export class SidebarComponent implements OnInit {
     assignUser: false
   };
 
-  constructor(private sharedService : SharedService, private employeesService: EmployeesService, private router: Router) { }
+  constructor(private sharedService: SharedService, private router: Router) { }
+  
+  localStorage = inject(LocalStorageService);
 
   @ViewChild('sidebar') sidebar!: ElementRef;
   @ViewChild('sidebarHandleIcon') sidebarHandleIcon!: ElementRef;
@@ -98,7 +101,6 @@ export class SidebarComponent implements OnInit {
   toggleSubSecClass(event: Event, section: string): void {
     const element = event.currentTarget as HTMLElement;
     this.sectionStates[section] = !this.sectionStates[section];
-    // const form = this.employeeForm.nativeElement as HTMLFormElement;
     if (element.classList.contains("unlocked")) {
       if (element.classList.contains("active")) {
         element.classList.remove("active");
@@ -114,7 +116,6 @@ export class SidebarComponent implements OnInit {
           this.hideShowDepartmentListSidebar(false);
         }
 
-        // this.router.navigate(['/']);
         if (window.innerWidth <= 900) {
           var sideBar = this.sidebar.nativeElement;
           if (sideBar.classList.contains("active")) {
@@ -128,7 +129,6 @@ export class SidebarComponent implements OnInit {
         element.classList.add("active");
       }
     }
-    // this.handleFilters.resetSelectedFiltersState();
   }
 
   hideShowDepartmentListSidebar(check: boolean): void {

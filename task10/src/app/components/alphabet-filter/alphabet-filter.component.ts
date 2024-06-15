@@ -8,7 +8,7 @@ import { SharedService } from '../../services/shared.service';
   standalone: true,
   imports: [CommonModule],
   templateUrl: './alphabet-filter.component.html',
-  styleUrls: ['./alphabet-filter.component.css', '../../app.component.css']
+  styleUrls: ['./alphabet-filter.component.css', '../../pages/home/home.component.css']
 })
 export class AlphabetFilterComponent {
   alphabetArray: string[] = [];

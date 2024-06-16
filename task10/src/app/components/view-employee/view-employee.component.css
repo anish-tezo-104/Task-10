@@ -1,56 +1,97 @@
-.view-employee-container {
-    margin: 0 1rem 2rem 2.5rem;
+.view-employee-page-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 1.2rem;
+  background-color: #f5f5f5;
 }
 
-.view-employee-container h1 {
-    font-size: 1.5rem;
-    margin-bottom: 1rem;
+.view-employee-card {
+  width: 100%;
+  max-width: 70rem;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
 }
 
-.employee-details {
-    display: flex;
-    flex-wrap: nowrap;
-    flex-direction: column;
-    justify-content: center;
-    align-items: stretch;
+.profile-header {
+  display: flex;
+  align-items: center;
+  background: #f76666;
+  color: #fff;
+  padding: 1.2rem;
 }
 
-.personal-details, .employment-details {
-    flex: 1;
-    margin-right: 1rem;
+.profile-image img {
+  width: 8rem;
+  height: 8rem;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-right: 20px;
+  border: 3px solid #fff;
 }
 
-.personal-details>h2, .employment-details>h2{
-    color:#f44848;
+.profile-name h2 {
+  margin: 0;
+  font-size: 2rem;
 }
+
+.profile-name p {
+  margin: 5px 0 0;
+  font-size: 1.3rem;
+  color: #343434;
+}
+
+.profile-details {
+  padding: 1.2rem;
+}
+
+.section {
+  margin-bottom: 1.2rem;
+}
+
+.section h3 {
+  margin-bottom: 1rem;
+  border-bottom: 2px solid #f76666;
+  display: inline-block;
+  padding-bottom: 5px;
+  color: #f76666;
+}
+
 .detail {
-    display: flex;
-    color: black;
-    margin-bottom: 1rem;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 1rem;
 }
 
-.label {
-    min-width: 120px;
-    color: black;
-    font-weight: bold;
-    padding: 0.5rem;
+.detail .label {
+  font-weight: bold;
+  color: #333;
 }
 
-.value {
-    flex: 1;
-    color: black;
-    border: 1px solid #ccc;
-    margin-left: 0.5rem;
-    padding: 0.5rem;
+.detail .value {
+  color: #555;
 }
 
 @media (max-width: 768px) {
-    .employee-details {
-        flex-direction: column;
-    }
+  .profile-header {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
 
-    .personal-details, .employment-details {
-        margin-right: 0;
-        margin-bottom: 1.5rem;
-    }
+  .profile-image img {
+    margin-right: 0;
+    margin-bottom: 1rem;
+  }
+
+  .detail {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .detail .value {
+    margin-left: 0;
+  }
 }

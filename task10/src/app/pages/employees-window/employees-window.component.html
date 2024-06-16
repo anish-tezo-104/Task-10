@@ -33,9 +33,14 @@
       [dropdowns]="filterConfig"
       [selectedFilters]="selectedEmployeesFilters"
     ></app-filter-bar>
+
+    <div *ngIf="isEmployeesFetched===false && employeesList.length === 0" class="loading">
+      <div class="spinner"></div>
+    </div>
+
     <!--Employees Container-->
-    <div class="table-container-space">
-      <app-employee-table [employeesList]="employeesList"></app-employee-table>
+    <div class="table-container-space" *ngIf="employeesList.length>0">
+      <app-employee-table [employeesList]="employeesList" [isEmployeesFetched]="isEmployeesFetched"></app-employee-table>
     </div>
   </div>
 </section>

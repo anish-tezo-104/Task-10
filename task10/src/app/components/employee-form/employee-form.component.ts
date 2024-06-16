@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Dropdown } from '../../models/dropdown';
 import { CommonModule } from '@angular/common';
 import { Role } from '../../models/role';
@@ -7,12 +7,15 @@ import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } 
 import { EmployeesService } from '../../services/employees.service';
 import { MobileNumberValidationDirective } from '../../directives/mobile-number-validation.directive';
 import { ActivatedRoute, Router } from '@angular/router';
+import { ToasterService } from '../../services/toaster.service';
+import { ErrorCodes } from '../../enums/error-codes';
+import { SuccessCodes } from '../../enums/success-codes';
 
 
 @Component({
   selector: 'app-employee-form',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, MobileNumberValidationDirective,],
+  imports: [CommonModule, ReactiveFormsModule, MobileNumberValidationDirective],
   templateUrl: './employee-form.component.html',
   styleUrl: './employee-form.component.css'
 })
@@ -26,17 +29,21 @@ export class EmployeeFormComponent implements OnInit {
   projectOptions: Dropdown[] = [];
   employeeForm: FormGroup;
   departmentSelected: boolean = false;
+  newFileSelected: boolean = false;
   employeeId: number | null = null;
   editEmployee: any = null;
   selectedFile: any | null = null;
   formData: FormData;
-  imagePreview: string | ArrayBuffer | null = '../assets/default-user.png'
+  imagePreview: any = '../assets/default-user.png'
+  isDataFetched: boolean = false;
+  
 
   constructor(
     private dropdownsService: DropdownsService,
     private employeesService: EmployeesService,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private toast: ToasterService
   ) {
 
     this.formData = new FormData();
@@ -59,7 +66,6 @@ export class EmployeeFormComponent implements OnInit {
   }
 
   ngOnInit(): void {
-
     this.rolesOptions = JSON.parse(localStorage.getItem('rolesOptions') || '[]');
     this.locationOptions = JSON.parse(localStorage.getItem('locationOptions') || '[]');
     this.departmentOptions = JSON.parse(localStorage.getItem('departmentOptions') || '[]');
@@ -70,9 +76,9 @@ export class EmployeeFormComponent implements OnInit {
     this.route.params.subscribe(params => {
       this.employeeId = params['id'];
       if (this.employeeId) {
+        this.editEmployees(this.employeeId);
         this.showEditPage = true;
         this.employeeForm.controls['uid'].disable();
-        this.editEmployees(this.employeeId);
       }
     });
   }
@@ -80,6 +86,7 @@ export class EmployeeFormComponent implements OnInit {
   onFileSelected(event: any): void {
     if (event.target.files && event.target.files.length > 0) {
       this.selectedFile = event.target.files[0];
+      this.newFileSelected = true;
       // Update image preview
       const reader = new FileReader();
       reader.onload = () => {
@@ -93,15 +100,34 @@ export class EmployeeFormComponent implements OnInit {
   editEmployees(employeeId: number): void {
     this.employeesService.getEmployeeById(employeeId).subscribe({
       next: (data) => {
-        this.employeeForm.patchValue(data);
+
+        if (data.joiningDate) {
+          data.joiningDate = new Date(data.joiningDate).toISOString().substring(0, 10);
+        }
+
+        if (data.dob) {
+          data.dob = new Date(data.dob).toISOString().substring(0, 10);
+        }
+
+        if (data.managerId == null) {
+          data.managerId = null;
+        }
+
         this.editEmployee = data;
+        this.employeeForm.patchValue(data);
         this.departmentSelected = true;
         this.employeeForm.controls['roleId'].enable();
         this.filterRolesByDepartment(data.departmentId);
+        this.imagePreview = data.profileImageData ? 'data:image/jpeg;base64,' + data.profileImageData : this.imagePreview;
+        this.selectedFile = null;
+        this.newFileSelected = false;
       },
-      error: (err) => {
-        console.log(err);
+      error: () => {
+        this.toast.showErrorToaster(ErrorCodes.FAILED_TO_FETCH_EMPLOYEE);
       },
+      complete: () => {
+        this.isDataFetched = true;
+      }
     });
   }
 
@@ -116,6 +142,7 @@ export class EmployeeFormComponent implements OnInit {
       this.projectOptions = data;
     });
   }
+
 
   handleEmployeeFormSubmit(): void {
     const employeeData = this.employeeForm.getRawValue();
@@ -143,10 +170,11 @@ export class EmployeeFormComponent implements OnInit {
         next: () => {
         },
         error: (err) => {
-          console.log(err);
+          this.toast.showErrorToaster(err);
         },
         complete: () => {
           this.onCancelForm();
+          this.toast.showSuccessToaster(SuccessCodes.EDIT_EMPLOYEE_SUCCESS);
           this.router.navigate(['/Employees']);
           this.imagePreview = "../assets/default-user.png";
         }
@@ -160,18 +188,21 @@ export class EmployeeFormComponent implements OnInit {
     if (this.employeeForm.valid) {
       this.employeesService.addEmployee(employeeData, this.selectedFile).subscribe({
         next: () => {
-          this.onCancelForm();
+
         },
         error: (err) => {
-          console.log(err);
+          this.toast.showErrorToaster(err);
         },
         complete: () => {
+          this.toast.showSuccessToaster(ErrorCodes.EMPLOYEE_ADDED_SUCCESS);
+          this.onCancelForm();
+          this.router.navigate(['/Employees']);
           this.imagePreview = "../assets/default-user.png";
         }
       });
     }
     else {
-      console.log("Form is invalid");
+      this.toast.showWarningToaster(ErrorCodes.FORM_INVALID, ErrorCodes.TRY_AGAIN);
     }
   }
 
@@ -195,7 +226,6 @@ export class EmployeeFormComponent implements OnInit {
   filterRolesByDepartment(departmentId: number): void {
 
     this.filteredRolesOptions = this.rolesOptions.filter(role => role.departmentId === departmentId);
-    console.log(this.filteredRolesOptions, departmentId)
     if (this.filteredRolesOptions.length === 0) {
       this.departmentSelected = false;
       this.employeeForm.controls['roleId'].setValue(null);
@@ -207,5 +237,7 @@ export class EmployeeFormComponent implements OnInit {
     this.employeeForm.controls['roleId'].disable();
     this.departmentSelected = false;
     this.filteredRolesOptions = [];
+    this.newFileSelected = false;
   }
+
 }

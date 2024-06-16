@@ -30,9 +30,9 @@
       <div class="left">Total Employees</div>
       <div class="right">
         <div class="employee-count">
-          <ng-container *ngIf="role.employees.length <= 4; else moreThanFour">
+          <ng-container *ngIf="role.employeesCount <= 4; else moreThanFour">
             <!-- Show images for each employee -->
-            <ng-container *ngFor="let employee of role.employees">
+            <ng-container *ngFor="let employee of [].constructor(role.employeesCount)">
               <img
                 src="../assets/profile.png"
                 alt="Employee"
@@ -41,13 +41,13 @@
             </ng-container>
             <!-- Show the count -->
             <span class="employees-count-circle">{{
-              role.employees.length
+              role.employeesCount
             }}</span>
           </ng-container>
           <!-- If employees count is more than 4 -->
           <ng-template #moreThanFour>
             <!-- Show only 4 images -->
-            <ng-container *ngFor="let employee of role.employees.slice(0, 4)">
+            <ng-container *ngFor="let employee of [].constructor(4)">
               <img
                 src="../assets/profile.png"
                 alt="Employee"
@@ -56,7 +56,7 @@
             </ng-container>
             <!-- Show the remaining count -->
             <span class="employees-count-circle">
-              +{{ role.employees.length - 4 }}</span
+              +{{ role.employeesCount - 4 }}</span
             >
           </ng-template>
         </div>
@@ -66,7 +66,7 @@
       class="role-card-details view-all-employees"
       (click)="openRoleDescription()"
     >
-      <div class="left">View all employees</div>
+      <div [routerLink]="['/Roles', role.roleId]" class="left">View all employees</div>
       <div class="right-arrow-icon">
         <img src="../assets/right-arrow.svg" alt="Arrow Right Icon" />
       </div>

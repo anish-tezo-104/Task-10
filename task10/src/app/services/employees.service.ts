@@ -1,12 +1,13 @@
 import { HttpClient, HttpEventType, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { map, Observable } from 'rxjs';
+import { catchError, map, Observable } from 'rxjs';
 import { Employee } from '../models/employee';
 import { environment } from '../../environments/environment.development';
 import { DepartmentEmployeeGroup } from '../models/department-employee-group';
 import { SelectedEmployeesFilter } from '../models/selected-employees-filter';
 import { AddEmployee } from '../models/add-employee';
 import { EditEmployee } from '../models/edit-employee';
+import { ErrorCodes } from '../enums/error-codes';
 
 @Injectable({
   providedIn: 'root'
@@ -15,47 +16,32 @@ export class EmployeesService {
   constructor(private http: HttpClient) { }
 
   getEmployeesGroupedByDepartment(): Observable<DepartmentEmployeeGroup[]> {
-    const params = new HttpParams().set('GroupBy', "department");
+    const params = new HttpParams().set('GroupBy', 'department');
 
     return this.http.get<any>(`${environment.API_URL}/Api/Employees`, { params }).pipe(
-
       map(response => {
         if (response.status === 'SUCCESS') {
-
-          return response.data.map((item: any) => {
-            return {
-              departmentId: item.departmentId,
-              departmentName: item.departmentName,
-              employeesCount: item.employeesCount,
-            } as DepartmentEmployeeGroup;
-          });
+          return response.data.map((item: any) => ({
+            departmentId: item.departmentId,
+            departmentName: item.departmentName,
+            employeesCount: item.employeesCount,
+          } as DepartmentEmployeeGroup));
         } else {
-          throw new Error('Failed to fetch employees');
+          throw new Error(`${response.statusCode} ${response.errorCode}`);
+        }
+      }),
+      catchError(error => {
+        if (error.status === 404) {
+          throw new Error(`${error.status} ${ErrorCodes.ERROR_OCCURRED}`);
+        } else {
+          if (error.status != 0) {
+            throw new Error(`${error.status} ${ErrorCodes.UNKNOWN_ERROR.toString()}`);
+          }
+          throw new Error(`${ErrorCodes.UNKNOWN_ERROR.toString()}`);
         }
       })
     );
   }
-
-  // getEmployeesGroupedByDepartment(): Observable<DepartmentEmployeeGroup[]> {
-  //   const params = new HttpParams().set('GroupBy', 'department');
-
-  //   return this.http.get<any>(`${environment.API_URL}/Api/Employees`, { params }).pipe(
-  //     map(response => {
-  //       if (response.status === 'SUCCESS') {
-  //         return Object.keys(response.data).map(key => {
-  //           const item = response.data[key];
-  //           return {
-  //             departmentId: parseInt(key),
-  //             departmentName: item[0]?.departmentName || 'N/A',
-  //             employeesCount: item.length,
-  //           } as DepartmentEmployeeGroup;
-  //         });
-  //       } else {
-  //         throw new Error('Failed to fetch employees');
-  //       }
-  //     })
-  //   );
-  // }
 
   getEmployees(filters?: SelectedEmployeesFilter, pageNumber?: number, pageSize?: number, search?: string): Observable<Employee[]> {
     let params = new HttpParams();
@@ -95,19 +81,98 @@ export class EmployeesService {
         if (response.status === 'SUCCESS' && Array.isArray(response.data)) {
           return response.data as Employee[];
         } else {
-          return [];
+          throw new Error(`${response.statusCode} ${response.errorCode}`);
+        }
+      }),
+      catchError(error => {
+        if (error.status === 404) {
+          throw new Error(`${error.status} ${ErrorCodes.ERROR_OCCURRED}`);
+        } else {
+          if (error.status != 0) {
+            throw new Error(`${error.status} ${ErrorCodes.UNKNOWN_ERROR.toString()}`);
+          }
+          throw new Error(`${ErrorCodes.UNKNOWN_ERROR.toString()}`);
         }
       })
     );
   }
 
-  countEmployees(): Observable<number>{
+  getEmployeesByDeptId(id: number): Observable<Employee[]> {
+
+    const params = new HttpParams().set('DepartmentId', id.toString());
+
+
+    return this.http.get<any>(`${environment.API_URL}/Api/Employees`, { params }).pipe(
+      map(response => {
+        if (response.status === 'SUCCESS') {
+          return response.data as Employee[];
+        } else {
+          throw new Error(`${response.statusCode} ${response.errorCode}`);
+        }
+      }),
+      catchError(error => {
+        if (error.status === 404) {
+          throw new Error(`${error.status} ${ErrorCodes.ERROR_OCCURRED}`);
+        } else {
+          if (error.status != 0) {
+            throw new Error(`${error.status} ${ErrorCodes.UNKNOWN_ERROR.toString()}`);
+          }
+          throw new Error(`${ErrorCodes.UNKNOWN_ERROR.toString()}`);
+        }
+      })
+    );
+  }
+
+  getEmployeesByRoleId(id: number, pageNumber?: number, pageSize?: number): Observable<Employee[]> {
+    let params = new HttpParams()
+
+    if (pageNumber && pageSize) {
+      params = params.append('PageNumber', pageNumber.toString());
+      params = params.append('PageSize', pageSize.toString());
+    }
+
+    params = params.append('RoleId', id.toString());
+
+    const url = `${environment.API_URL}/Api/Employees?${params.toString()}`
+    console.log(url);
+    return this.http.get<any>(url).pipe(
+      map(response => {
+        if (response.status === 'SUCCESS') {
+          return response.data as Employee[];
+        } else {
+          throw new Error(`${response.statusCode} ${response.errorCode}`);
+        }
+      }),
+      catchError(error => {
+        if (error.status === 404) {
+          throw new Error(`${error.status} ${ErrorCodes.ERROR_OCCURRED}`);
+        } else {
+          if (error.status != 0) {
+            throw new Error(`${error.status} ${ErrorCodes.UNKNOWN_ERROR.toString()}`);
+          }
+          throw new Error(`${ErrorCodes.UNKNOWN_ERROR.toString()}`);
+        }
+      })
+    );
+  }
+
+  countEmployees(): Observable<number> {
     return this.http.get<any>(`${environment.API_URL}/Api/Employees/Count`).pipe(
       map(response => {
         if (response.status === 'SUCCESS') {
           return response.data;
         } else {
-          throw new Error('Failed to count employees');
+          throw new Error(`${response.statusCode} ${response.errorCode}`);
+        }
+      }),
+      catchError(error => {
+        if (error.status === 404) {
+          throw new Error(`${error.status} ${ErrorCodes.ERROR_OCCURRED}`);
+        } else {
+          if (error.status != 0) {
+            throw new Error(`${error.status} ${ErrorCodes.UNKNOWN_ERROR.toString()}`);
+          }
+          throw new Error(`${ErrorCodes.UNKNOWN_ERROR.toString()}`);
         }
       })
     );
@@ -120,7 +185,17 @@ export class EmployeesService {
         if (response.status === 'SUCCESS') {
           return response.data;
         } else {
-          throw new Error('Failed to delete employees');
+          throw new Error(`${response.statusCode} ${response.errorCode}`);
+        }
+      }),
+      catchError(error => {
+        if (error.status === 404) {
+          throw new Error(`${error.status} ${ErrorCodes.ERROR_OCCURRED}`);
+        } else {
+          if (error.status != 0) {
+            throw new Error(`${error.status} ${ErrorCodes.UNKNOWN_ERROR.toString()}`);
+          }
+          throw new Error(`${ErrorCodes.UNKNOWN_ERROR.toString()}`);
         }
       })
     );
@@ -140,22 +215,41 @@ export class EmployeesService {
           if (response.status === 'SUCCESS') {
             return response.data;
           } else {
-            throw new Error('Failed to add employee');
+            throw new Error(`${response.statusCode} ${response.errorCode}`);
           }
         }
         return null;
+      }),
+      catchError(error => {
+        if (error.status === 404) {
+          throw new Error(`${error.status} ${ErrorCodes.ERROR_OCCURRED}`);
+        } else {
+          if (error.status != 0) {
+            throw new Error(`${error.status} ${ErrorCodes.UNKNOWN_ERROR.toString()}`);
+          }
+          throw new Error(`${ErrorCodes.UNKNOWN_ERROR.toString()}`);
+        }
       })
     );
   }
 
   getEmployeeById(id: number): Observable<any> {
-    console.log(`${environment.API_URL}Api/Employees?EmployeeId=${id}`);
     return this.http.get<any>(`${environment.API_URL}/Api/Employees?EmployeeId=${id}`).pipe(
       map(response => {
         if (response.status === 'SUCCESS') {
           return response.data as any;
         } else {
-          throw new Error('Failed to fetch employee');
+          throw new Error(`${response.statusCode} ${response.errorCode}`);
+        }
+      }),
+      catchError(error => {
+        if (error.status === 404) {
+          throw new Error(`${error.status} ${ErrorCodes.ERROR_OCCURRED}`);
+        } else {
+          if (error.status != 0) {
+            throw new Error(`${error.status} ${ErrorCodes.UNKNOWN_ERROR.toString()}`);
+          }
+          throw new Error(`${ErrorCodes.UNKNOWN_ERROR.toString()}`);
         }
       })
     );
@@ -172,7 +266,7 @@ export class EmployeesService {
         if (response.status === 'SUCCESS') {
           return response.data;
         } else {
-          throw new Error('Failed to edit employee');
+          throw new Error(`${response.statusCode} ${response.errorCode}`);
         }
       })
     );

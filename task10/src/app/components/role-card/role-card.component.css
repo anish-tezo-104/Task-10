@@ -4,9 +4,9 @@
 
 .roles-card {
     padding: 1rem;
-    width: 20rem;
+    width: 22rem;
     height: 80%;
-    margin : 0 1.5rem 1.5rem 0;
+    margin-bottom : 1.5rem;
     border-radius: 8px;
     display: flex;
     flex-direction: column;
@@ -52,7 +52,7 @@
 
 .employees-count-circle {
   background-color: #ffffff;
-  border: 0.5px solid rgba(0, 0, 0, 0.05);
+  border: 0.5px solid rgba(0, 0, 0, 0.434);
   border-radius: 50%;
   font-size: 10px;
   text-align: center;

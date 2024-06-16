@@ -1,0 +1,44 @@
+<!-- employee-card.component.html -->
+<div class="employee-card">
+  <div class="employee-card-name">
+    <div class="profile-card role-desc-emp-card">
+      <img [src]="getProfileImage(employee)" alt="Employee Image" class="employee-img" />
+      <div class="profile-details">
+        <p class="profile-name">{{ employee.firstName }} {{ employee.lastName }}</p>
+        <p class="profile-title">{{ employee.roleName }}</p>
+      </div>
+    </div>
+  </div>
+  <div class="employee-card-details emp-id">
+    <div class="left">
+      <div>
+        <img src="../assets/emp-id-icon.svg" class="team-icon" alt="Team Icon" />
+      </div>
+      <div>{{ employee.uid }}</div>
+    </div>
+  </div>
+  <div class="employee-card-details email-id">
+    <div class="left">
+      <img src="../assets/email-icon.svg" alt="Team Icon" />
+      <div>{{ employee.email }}</div>
+    </div>
+  </div>
+  <div class="employee-card-details role-domain">
+    <div class="left">
+      <img src="../assets/team-icon.svg" alt="Team Icon" />
+      <div>{{ employee.departmentName }}</div>
+    </div>
+  </div>
+  <div class="employee-card-details role-location">
+    <div class="left">
+      <img src="../assets/location-icon.svg" alt="Team Icon" />
+      <div>{{ employee.locationName }}</div>
+    </div>
+  </div>
+  <div class="employee-card-details view-all-employees" >
+    <div class="left" >View</div>
+    <div class="right-arrow-icon" [routerLink]="['/Details', employee.id]">
+      <img src="../assets/right-arrow.svg" alt="Arrow Right Icon" />
+    </div>
+  </div>
+</div>

@@ -1,21 +1,27 @@
 import { ChangeDetectorRef, Component, ElementRef, EventEmitter, Output, ViewChild } from '@angular/core';
 import { HeaderComponent } from '../../components/header/header.component';
 import { SidebarComponent } from '../../components/sidebar/sidebar.component';
-import { LocalStorageService } from '../../services/local-storage.service';
+
 import { DropdownsService } from '../../services/dropdowns.service';
-import { Router } from 'express';
 import { Dropdown } from '../../models/dropdown';
 import { Role } from '../../models/role';
-import { RouterLinkActive, RouterOutlet } from '@angular/router';
+import { Router, RouterLinkActive, RouterOutlet } from '@angular/router';
+import { CommonModule } from '@angular/common';
+import { AuthService } from '../../auth/auth.service';
+import { ToasterService } from '../../services/toaster.service';
+import { SharedService } from '../../services/shared.service';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [HeaderComponent, SidebarComponent, RouterOutlet,  RouterLinkActive],
+  imports: [HeaderComponent, SidebarComponent, RouterOutlet, RouterLinkActive, CommonModule],
   templateUrl: './home.component.html',
-  styleUrls: ['./home.component.css','../../app.component.css', '../../../styles.css']
+  styleUrls: ['./home.component.css', '../../app.component.css', '../../../styles.css']
 })
+
+
 export class HomeComponent {
+
 
   departmentOptions: Dropdown[] = [];
   statusOptions: Dropdown[] = [];
@@ -29,20 +35,38 @@ export class HomeComponent {
   @Output() gridContainerRefEmitter: EventEmitter<HTMLDivElement> = new EventEmitter();
 
 
-  constructor( private localStorageService: LocalStorageService, public dropdownsService: DropdownsService) {
+  constructor(
+    private cdref: ChangeDetectorRef,
+    public dropdownsService: DropdownsService,
+    public authService: AuthService,
+    public toast: ToasterService,
+    public router: Router
+  ) { }
+
+  ngAfterContentChecked() {
+    this.cdref.detectChanges();
 
   }
   ngOnInit() {
-
-    this.loadDepartmentDropdown();
-    this.loadStatusDropdown();
-    this.loadLocationDropdown();
-    this.loadRolesDropdown();
+    this.cdref.detectChanges();
+    if (this.authService.isAuthenticated()) {
+      this.loadDepartmentDropdown();
+      this.loadStatusDropdown();
+      this.loadLocationDropdown();
+      this.loadRolesDropdown();
+    }
+    else
+    {
+      this.toast.showErrorToaster('Unauthorized! Please Login');
+      this.router.navigate(['/Login'])
+    }
+    
   }
   ngAfterViewInit() {
     this.gridContainerRef = this.gridContainer.nativeElement;
     this.gridContainerRefEmitter.emit(this.gridContainerRef);
   }
+
 
   loadDepartmentDropdown(): void {
     this.dropdownsService.getDepartmentList().subscribe({
@@ -51,7 +75,7 @@ export class HomeComponent {
         localStorage.setItem('departmentOptions', JSON.stringify(this.departmentOptions));
       },
       error: (err) => {
-        console.log(err);
+        this.toast.showErrorToaster(err);
       }
     });
   }
@@ -63,7 +87,7 @@ export class HomeComponent {
         localStorage.setItem('rolesOptions', JSON.stringify(this.rolesOptions));
       },
       error: (err) => {
-        console.log(err);
+        this.toast.showErrorToaster(err);
       }
     });
   }
@@ -83,7 +107,7 @@ export class HomeComponent {
         localStorage.setItem('locationOptions', JSON.stringify(this.locationOptions));
       },
       error: (err) => {
-        console.log(err);
+        this.toast.showErrorToaster(err);
       }
     });
   }

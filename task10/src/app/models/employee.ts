@@ -23,4 +23,5 @@ export interface Employee {
     roleName: string;
     modeStatusId: number | null;
     modeStatusName: string;
+    profileImageData?: string;
 }

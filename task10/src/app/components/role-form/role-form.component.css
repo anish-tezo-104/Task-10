@@ -7,6 +7,12 @@
     display: block;
 }
 
+button[disabled] {
+    background-color: #f89191 !important;
+    color: white !important;
+    cursor: not-allowed !important;
+}
+
 .add-roles-container h1 {
     color: black;
 }

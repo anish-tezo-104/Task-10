@@ -25,14 +25,13 @@
               "src/assets"
             ],
             "styles": [
+              "node_modules/bootstrap/dist/css/bootstrap.min.css",
               "src/styles.css"
             ],
             "scripts": [],
             "server": "src/main.server.ts",
-            "prerender": true,
-            "ssr": {
-              "entry": "server.ts"
-            }
+            "prerender": false,
+            "ssr": false
           },
           "configurations": {
             "production": {
@@ -96,7 +95,6 @@
             ],
             "styles": [
               "src/styles.css",
-              "node_modules/material-design-icons/iconfont/material-icons.css"
             ],
             "scripts": []
           }

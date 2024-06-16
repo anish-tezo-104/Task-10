@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { createDefaultSelectedEmployeesFilter, SelectedEmployeesFilter } from '../models/selected-employees-filter';
 import { EmployeesService } from './employees.service';
@@ -7,12 +7,20 @@ import { DepartmentEmployeeGroup } from '../models/department-employee-group';
 import { createDefaultSelectedRolesFilter, SelectedRolesFilter } from '../models/selected-roles-filter';
 import { RolesService } from './roles.service';
 import { Role } from '../models/role';
+import { ToasterService } from './toaster.service';
+import { AuthService } from '../auth/auth.service';
+import { SuccessCodes } from '../enums/success-codes';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
 })
 
 export class SharedService {
+
+  toast = inject(ToasterService);
+  router = inject(Router);
+
   private employeesSubject: BehaviorSubject<Employee[]> = new BehaviorSubject<Employee[]>([]);
   public employees$: Observable<Employee[]> = this.employeesSubject.asObservable();
 
@@ -43,6 +51,9 @@ export class SharedService {
   private employeesGroupedByDepartmentSubject: BehaviorSubject<DepartmentEmployeeGroup[]> = new BehaviorSubject<DepartmentEmployeeGroup[]>([]);
   public employeesGroupedByDepartment$: Observable<DepartmentEmployeeGroup[]> = this.employeesGroupedByDepartmentSubject.asObservable();
 
+  private alphabetActiveSubject = new BehaviorSubject<boolean>(false);
+  alphabetActive$ = this.alphabetActiveSubject.asObservable();
+
   private readonly DEFAULT_PAGE_NUMBER = 1;
   private readonly DEFAULT_PAGE_SIZE = 5;
 
@@ -51,7 +62,25 @@ export class SharedService {
   private pageSizeSubject: BehaviorSubject<number> = new BehaviorSubject<number>(this.DEFAULT_PAGE_SIZE);
   public pageSize$: Observable<number> = this.pageSizeSubject.asObservable();
 
-  constructor(private rolesService: RolesService, private employeesService: EmployeesService) { }
+  constructor(private rolesService: RolesService,
+    private employeesService: EmployeesService,
+    private authService: AuthService) { }
+
+
+  logout(id: number): void {
+    this.authService.logout(id).subscribe({
+      next: () => {
+      },
+      error: (err) => {
+        this.toast.showErrorToaster(err);
+      },
+      complete: () => {
+        localStorage.clear();
+        this.toast.showSuccessToaster(SuccessCodes.LOGGED_OUT_SUCCESS);
+        this.router.navigate(['/Login']);
+      }
+    })
+  }
 
   loadEmployeesGroupedByDepartment(): void {
     this.employeesService.getEmployeesGroupedByDepartment().subscribe({
@@ -63,20 +92,15 @@ export class SharedService {
         }
       },
       error: (err) => {
-        console.error('Error fetching employees grouped by department:', err);
+        this.toast.showErrorToaster(err);
         this.employeesGroupedByDepartmentSubject.next([]);
       }
     });
   }
 
-
-  getEmployeesGroupedByDepartment(): Observable<DepartmentEmployeeGroup[]> {
-    return this.employeesGroupedByDepartment$;
-  }
-
   searchEmployees(searchKeyword: string): void {
     this.employeesService.getEmployees(undefined, this.getPageNumber(), this.getPageSize(), searchKeyword).subscribe({
-      next: (data: Employee[]) => {
+      next: (data: Employee[] | Error) => {
         if (Array.isArray(data)) {
           this.employeesSubject.next(data);
         } else {
@@ -84,7 +108,7 @@ export class SharedService {
         }
       },
       error: (err) => {
-        console.error('Error fetching employees:', err);
+        this.toast.showErrorToaster(err);
         this.isLoadingSubject.next(false);
         this.employeesSubject.next([]);
       },
@@ -95,7 +119,7 @@ export class SharedService {
     );
   }
 
-  searchRoles(searchKeyword: string): void{
+  searchRoles(searchKeyword: string): void {
     this.rolesService.getRoles(undefined, this.getPageNumber(), this.getPageSize(), searchKeyword).subscribe({
       next: (data: Role[]) => {
         if (Array.isArray(data)) {
@@ -105,7 +129,7 @@ export class SharedService {
         }
       },
       error: (err) => {
-        console.error('Error fetching roles:', err);
+        this.toast.showErrorToaster(err);
         this.isLoadingSubject.next(false);
         this.rolesSubject.next([]);
       },
@@ -121,7 +145,7 @@ export class SharedService {
     const pageNumber = this.pageNumberSubject.value;
     const pageSize = this.pageSizeSubject.value;
     this.employeesService.getEmployees(filters, pageNumber, pageSize).subscribe({
-      next: (data: Employee[]) => {
+      next: (data: Employee[] | Error) => {
         if (Array.isArray(data)) {
           this.employeesSubject.next(data);
         } else {
@@ -129,7 +153,7 @@ export class SharedService {
         }
       },
       error: (err) => {
-        console.error('Error fetching employees:', err);
+        this.toast.showErrorToaster(err);
         this.isLoadingSubject.next(false);
         this.employeesSubject.next([]);
       },
@@ -143,6 +167,7 @@ export class SharedService {
     this.isLoadingSubject.next(true);
     const pageNumber = this.pageNumberSubject.value;
     const pageSize = this.pageSizeSubject.value;
+
     this.rolesService.getRoles(filters, pageNumber, pageSize).subscribe({
       next: (data: Role[]) => {
         if (Array.isArray(data)) {
@@ -152,7 +177,7 @@ export class SharedService {
         }
       },
       error: (err) => {
-        console.error('Error fetching roles:', err);
+        this.toast.showErrorToaster(err);
         this.isLoadingSubject.next(false);
         this.rolesSubject.next([]);
       },
@@ -162,12 +187,9 @@ export class SharedService {
     })
   }
 
-  getEmployeesList(): Observable<Employee[]> {
-    return this.employees$;
-  }
-
-  getRolesList(): Observable<Role[]> {
-    return this.roles$;
+  setEmployeesSubject(employees: Employee[]): void {
+    console.log(employees);
+    this.employeesSubject.next(employees);
   }
 
   getLoadingStatus(): Observable<boolean> {
@@ -176,6 +198,10 @@ export class SharedService {
 
   setLoadingStatus(isLoading: boolean): void {
     this.isLoadingSubject.next(isLoading);
+  }
+
+  setAlphabetActiveState(active: boolean): void {
+    this.alphabetActiveSubject.next(active);
   }
 
   getSelectedEmployeesFilters(): SelectedEmployeesFilter {
@@ -239,7 +265,6 @@ export class SharedService {
   }
 
   disableButtons(selectedFilters: SelectedEmployeesFilter | SelectedRolesFilter): boolean {
-
     if (this.isEmployeeFilter(selectedFilters)) {
       return (
         selectedFilters.alphabet.length === 0 &&
@@ -275,5 +300,4 @@ export class SharedService {
   private isRoleFilter(filters: any): filters is SelectedRolesFilter {
     return !('status' in filters);
   }
-
 }

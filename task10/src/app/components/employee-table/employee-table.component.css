@@ -1,6 +1,6 @@
 .employees-container {
     grid-area: employees;
-    z-index: 1;
+
     overflow-y: auto;
     margin: 1.5rem 1rem 0 2rem;
 }
@@ -72,9 +72,8 @@ button[disabled], .btn-delete:hover {
     font-weight: bold;
 }
 
-.btn-active {
-    background-color: #e7f4e8;
-    color: #539b83;
+.btn-active, .btn-inactive {
+
     text-align: center;
     border-radius: 5px;
     padding: 0.5rem;
@@ -83,39 +82,102 @@ button[disabled], .btn-delete:hover {
     border: none;
 }
 
+.btn-active {
+    background-color: #e7f4e8;
+    color: #539b83;
+}
+
+.btn-inactive {
+    background-color: #fbdede;
+    color: #c92334;
+    width: 5rem;
+}
+
 .emp-card {
     margin: 0;
 }
 
 .material-symbols-outlined.sort-icon {
-  font-size: 16px; /* Adjust the icon size if needed */
+    font-size: 16px;
+    /* Adjust the icon size if needed */
 }
 
 .table-container {
+    display: flex;
+    flex: 1;
     overflow-y: auto;
     overflow-x: auto !important;
-    height: 100%;
 }
 
 .employees-table .profile-details {
     width: auto;
 }
 
+.profile-card {
+    display: flex;
+    align-items: center;
+    margin: 0 0.6rem;
+    color: black;
+}
+
+.profile-details {
+    display: flex;
+    flex-direction: column;
+    margin: 0 0 0 1rem;
+    width: 7rem;
+}
+
+.profile-img {
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 50%;
+}
+
+.profile-pic-container {
+    position: relative;
+    display: inline-block;
+}
+
+.profile-name {
+    font-weight: 500;
+    font-size: 1rem;
+}
+
+.profile-name,
+.profile-role,
+.profile-email {
+    margin: 0;
+}
+
+.profile-role {
+    font-weight: 800;
+}
+
+
+:host {
+    display: flex;
+    flex-direction: column;
+    height: 100%s;
+}
+
+
 .employees-table {
     border-collapse: collapse;
     width: 100%;
     box-shadow: 0px 4px 8px 0px rgba(0, 0, 0, 0.183);
     border-radius: 0 0 10px 10px;
+    overflow: hidden;
 }
 
 .header-content {
-  display: flex;
-  align-items: center;
-  justify-content: flex-start
+    display: flex;
+    align-items: center;
+    justify-content: flex-start
 }
 
 .header-content span {
-  margin-right: 8px; /* Adjust this to control the spacing between text and icon */
+    margin-right: 8px;
+    /* Adjust this to control the spacing between text and icon */
 }
 
 .check-box-col input[type="checkbox"] {
@@ -164,7 +226,7 @@ th:hover {
 }
 
 thead th {
-  position: relative;
+    position: relative;
 
 }
 
@@ -182,7 +244,7 @@ thead th {
     font-size: 1.4rem;
 }
 
-.ellipsis-menu.active{
+.ellipsis-menu.active {
     display: block;
 }
 
@@ -195,6 +257,7 @@ thead th {
     right: 2rem;
     bottom: 0.5rem;
     z-index: 1;
+    cursor: pointer
 }
 
 .ellipsis-menu ul {

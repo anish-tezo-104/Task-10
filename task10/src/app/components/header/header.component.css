@@ -31,8 +31,42 @@
   color: #f44848;
 }
 
-.dropdown-content span:hover {
-  cursor: pointer;
+.dropdown-content {
+  position: absolute;
+  top: 4.2rem;
+  right: 2rem;
+  background-color: #f9f9f9;
+  min-width: 12rem;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+  display: block;
+}
+
+.dropdown-content ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.dropdown-content ul li {
+  width: 100%; /* Ensure each li takes full width */
+}
+
+.dropdown-content ul li a {
+  text-decoration: none;
+  color: #333;
+  display: block;
+  padding: 10px; /* Padding for better clickable area */
+}
+
+.dropdown-content ul li a:hover {
+  background-color: #f44848; /* Red background on hover */
+  color: white; /* White text on hover */
+}
+
+
+.keyboard-arrow-down-icon{
+  cursor: pointer
 }
 
 .header-container {
@@ -96,18 +130,20 @@
   color: #bac1c8;
 }
 
+
 .profile-card {
   display: flex;
   align-items: center;
   margin: 0 0.6rem;
   color: black;
+  width: max-content;
 }
 
 .profile-details {
   display: flex;
   flex-direction: column;
   margin: 0 0 0 1rem;
-  width: 7rem;
+  width: max-content;
 }
 
 .profile-img {
@@ -120,6 +156,22 @@
   position: relative;
   display: inline-block;
 }
+
+.profile-name {
+  font-weight: 500;
+  font-size: 1rem;
+}
+
+.profile-name,
+.profile-role,
+.profile-email {
+  margin: 0;
+}
+
+.profile-role {
+  font-weight: 600;
+}
+
 
 .status-circle {
   position: absolute;
@@ -142,24 +194,6 @@
 .dnd {
   background-color: orange;
 }
-
-
-.profile-name {
-  font-weight: 500;
-  font-size: 1rem;
-}
-
-.profile-name,
-.profile-role,
-.profile-email {
-  margin: 0;
-}
-
-.profile-role {
-  font-weight: 800;
-}
-
-
 
 @media only screen and (max-width:1000px) {
 

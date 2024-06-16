@@ -132,21 +132,6 @@ select, .date-input {
     background-color: #ff6767;
 }
 
-
-.error-message {
-    color: red;
-    font-size: 0.8rem;
-}
-
-
-/* .error-message {
-    display: none;
-} */
-
-.error-message.active {
-    display: block;
-}
-
 .form-buttons {
     margin-top: 2rem;
 }
@@ -172,6 +157,15 @@ select, .date-input {
     color: red;
     margin-left: 4px;
     font-size: 1.2rem;
+}
+
+.error-message {
+    color: red;
+    font-size: 0.8rem;
+}
+
+.error-message.active {
+    display: block;
 }
 
 button[disabled] {

@@ -73,8 +73,23 @@
               rows="4"
               cols="50"
               name="description"
-
+              formControlName="description"
             ></textarea>
+            <div
+                class="error-message"
+                *ngIf="
+                  roleForm.controls['departmentId'].invalid &&
+                  (roleForm.controls['departmentId'].touched ||
+                    roleForm.controls['departmentId'].dirty)
+                "
+              >
+                <div
+                  class="error-message"
+                  *ngIf="roleForm.controls['description'].errors?.['maxLength']"
+                >
+                  &#9888; Maximum of 200 characters allowed.
+                </div>
+              </div>
           </div>
         </div>
         <div class="add-roles second-section">

@@ -4,5 +4,7 @@ export interface Role {
     departmentId: number | null;
     departmentName?: string | null;
     locationName?: string | null;
+    description?: string | "";
+    employeesCount: number;
     employees: [];
 }

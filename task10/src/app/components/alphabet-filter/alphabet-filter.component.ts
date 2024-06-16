@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
-import { Component, ElementRef, inject, QueryList,ViewChildren } from '@angular/core';
-import {  createDefaultSelectedEmployeesFilter, SelectedEmployeesFilter, } from '../../models/selected-employees-filter';
+import { Component, ElementRef, inject, QueryList, ViewChildren } from '@angular/core';
+import { createDefaultSelectedEmployeesFilter, SelectedEmployeesFilter, } from '../../models/selected-employees-filter';
 import { SharedService } from '../../services/shared.service';
 
 @Component({
@@ -31,8 +31,8 @@ export class AlphabetFilterComponent {
       this.selectedFilters = filters;
     });
 
-    this.btnResetDisabled = this.sharedService.getBtnResetState();
-    this.btnApplyDisabled = this.sharedService.getBtnApplyState();
+    this.btnResetDisabled = !this.isFilterApplied();
+    this.btnApplyDisabled = !this.isFilterApplied();
 
     this.sharedService.pageNumber$.subscribe(pageNumber => {
       this.pageNumber = pageNumber;
@@ -45,9 +45,9 @@ export class AlphabetFilterComponent {
     this.sharedService.resetAlphabetButtons$.subscribe(() => {
       if (this.alphBtns) {
         this.alphBtns.forEach(btn => btn.nativeElement.classList.remove('active'));
+        this.updateAlphabetActiveState(); 
       }
     });
-
   }
 
   isFilterApplied(): boolean {
@@ -79,6 +79,9 @@ export class AlphabetFilterComponent {
 
       this.sharedService.setSelectedEmployeesFilters(this.selectedFilters);
 
+      this.btnResetDisabled = !this.isFilterApplied();
+      this.btnApplyDisabled = !this.isFilterApplied();
+
       const shouldDisable = this.sharedService.updateButtonStates(this.selectedFilters);
 
       if (shouldDisable) {
@@ -86,14 +89,34 @@ export class AlphabetFilterComponent {
         this.sharedService.setPageNumber(1);
         this.sharedService.setPageSize(5);
       }
-
-      console.log('Selected filters:', this.selectedFilters);
+      this.updateAlphabetActiveState();
     }
   }
+
+  // resetAlphabetButtons(): void {
+  //   this.alphBtns.forEach(btn => {
+  //     btn.nativeElement.classList.remove("active");
+  //   });
 
   resetAlphabetButtons(): void {
     this.alphBtns.forEach(btn => {
       btn.nativeElement.classList.remove("active");
     });
+
+    this.selectedFilters.alphabet = [];
+    this.sharedService.setSelectedEmployeesFilters(this.selectedFilters);
+
+    this.btnResetDisabled = true;
+    this.btnApplyDisabled = true;
+
+    this.sharedService.loadEmployees();
+    this.sharedService.setPageNumber(1);
+    this.sharedService.setPageSize(5);
   }
+
+  private updateAlphabetActiveState(): void {
+    const active = this.alphBtns.toArray().some(btn => btn.nativeElement.classList.contains('active'));
+    this.sharedService.setAlphabetActiveState(active);
+  }
+  
 }

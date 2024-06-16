@@ -1,5 +1,4 @@
 <header class="header-container" id="headerContainer">
-  
   <div class="header">
     <div class="header-left">
       <img
@@ -7,13 +6,18 @@
         alt="Search Icon"
         class="search-icon"
       />
-      <input type="text" class="search-input" #searchInput placeholder="Search (Ctrl+/)" (keydown.enter)="handleSearch($event)"/>
+      <input
+        type="text"
+        class="search-input"
+        #searchInput
+        [(ngModel)]="searchKeyword"
+        placeholder="Search (Ctrl+/)"
+        (input)="handleInput()"
+        (keydown.enter)="handleSearch()"
+      />
     </div>
     <div class="header-right">
-      <div
-        class="burger-container dropdown"
-        (click)="handleBurger()"
-      >
+      <div class="burger-container dropdown" (click)="handleBurger()">
         <button class="burger-btn dropbtn">
           <span class="material-symbols-outlined"> menu </span>
         </button>
@@ -38,20 +42,25 @@
       </div>
       <div class="profile-card">
         <div class="profile-pic-container">
-          <img
-            src="../assets/profile.png"
-            alt="Profile Image"
-            class="profile-img"
-          />
+          <img [src]="profilePicture" alt="Profile Image" class="profile-img" />
           <div class="status-circle online"></div>
         </div>
         <div class="profile-details">
-          <p class="profile-name">Jhon Abraham</p>
-          <p class="profile-role">Admin</p>
+          <p class="profile-name">
+            {{ loggedUser.firstName  }}
+            {{ loggedUser.lastName  }}
+          </p>
+          <p class="profile-role">{{ loggedUser.roleName | titlecase }}</p>
         </div>
-        <span class="material-symbols-outlined keyboard-arrow-down-icon">
+        <span class="material-symbols-outlined keyboard-arrow-down-icon" (click)="toggleDropdown()">
           keyboard_arrow_down
         </span>
+        <div class="dropdown-content" *ngIf="showDropdown">
+          <ul>
+            <li><a (click)="logout()">Logout</a></li>
+            <li><a [routerLink]="['/Details', loggedUser.id]">Profile</a></li>
+          </ul>
+        </div>
       </div>
     </div>
   </div>

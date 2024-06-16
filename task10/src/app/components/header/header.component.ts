@@ -1,14 +1,20 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { SharedService } from '../../services/shared.service';
+import { CommonModule, TitleCasePipe } from '@angular/common';
+import { Router, RouterModule } from '@angular/router';
+import { ToasterService } from '../../services/toaster.service';
+import { SuccessCodes } from '../../enums/success-codes';
+import { FormsModule } from '@angular/forms';
+import { AuthService } from '../../auth/auth.service';
 
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [],
+  imports: [TitleCasePipe, CommonModule, RouterModule, FormsModule],
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.css', '../../pages/home/home.component.css']
 })
-export class HeaderComponent  {
+export class HeaderComponent {
   @ViewChild('sidebar') sidebar!: ElementRef;
   @ViewChild('gridContainer') gridContainer!: ElementRef;
   @ViewChild('sidebarHandleIcon') sidebarHandleIcon!: ElementRef;
@@ -18,7 +24,30 @@ export class HeaderComponent  {
   dropdownContentRef!: ElementRef;
   @ViewChild('searchInput') searchInput!: ElementRef<HTMLInputElement>;
 
-  constructor(private sharedService : SharedService) { }
+  loggedUser: any = null;
+  profilePicture: any = '../assets/default-user.png';
+  showDropdown = false;
+  searchKeyword: string = '';
+
+
+  constructor(private sharedService: SharedService,
+    private router: Router,
+    private toast: ToasterService,
+    private authService: AuthService) { }
+
+  ngOnInit(): void {
+    this.loggedUser = JSON.parse(localStorage.getItem("authUser") || '[]');
+    this.profilePicture = this.loggedUser.profileImageData ? 'data:image/jpeg;base64,' + this.loggedUser.profileImageData : this.profilePicture;
+  }
+
+  logout() {
+    this.sharedService.logout(this.loggedUser.id);
+  }
+
+
+  toggleDropdown() {
+    this.showDropdown = !this.showDropdown;
+  }
 
   toggleSideBar(): void {
     if (this.sidebar && this.gridContainer && this.sidebarHandleIcon) {
@@ -38,11 +67,22 @@ export class HeaderComponent  {
     }
   }
 
-  handleSearch(event: any): void {
-    if (event.key === 'Enter') {
-      const searchKeyword = this.searchInput.nativeElement.value.trim();
-      this.sharedService.searchEmployees(searchKeyword);
-      this.sharedService.searchRoles(searchKeyword);
+  handleInput(): void {
+    if (!this.searchKeyword.trim()) {
+      this.sharedService.loadEmployees();
+    }
+  }
+
+  handleSearch(): void {
+    const searchKeyword = this.searchKeyword.trim();
+    if (searchKeyword) {
+      if (window.location.pathname === "/Employees") {
+        this.sharedService.searchEmployees(searchKeyword);
+      }
+      if (window.location.pathname === "/Roles") {
+        this.sharedService.searchRoles(searchKeyword);
+      }
+
     }
   }
 

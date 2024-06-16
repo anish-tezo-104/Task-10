@@ -2,6 +2,7 @@
   [formGroup]="employeeForm"
   id="addEmployeesContainer"
   class="add-employees-page-container"
+  *ngIf="!showEditPage || (showEditPage && isDataFetched)"
 >
   <div class="add-employee-container">
     <h1>{{ showEditPage ? "Edit Employee" : "Add Employee" }}</h1>
@@ -48,6 +49,7 @@
                   name="empNo"
                   formControlName="uid"
                   placeholder="Employee Number"
+                  #UIDInput
                 />
                 <div
                   class="error-message"
@@ -207,7 +209,7 @@
                 </div>
                 <div
                   class="error-message"
-                  *ngIf="employeeForm.controls['email'].errors?.['pattern']"
+                  *ngIf="employeeForm.controls['email'].errors?.['email']"
                 >
                   &#9888; Invalid email!
                 </div>

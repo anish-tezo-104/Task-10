@@ -1,51 +1,47 @@
-<section id="viewEmployeeContainer" class="view-employee-page-container">
-  <div class="view-employee-container">
-    <div class="employee-details">
-      <div class="personal-details">
-        <h2>Personal Information</h2>
+<section *ngIf="isDataFetched" id="viewEmployeeContainer" class="view-employee-page-container">
+  <div class="view-employee-card">
+    <div class="profile-header">
+      <div class="profile-image">
+        <img [src]="imagePreview" alt="Profile Image" />
+      </div>
+      <div class="profile-name">
+        <h2>{{employee?.firstName || 'N/A'}} {{employee?.lastName || 'N/A'}}</h2>
+        <p>{{employee?.roleName || 'N/A'}}</p>
+      </div>
+    </div>
+    <div class="profile-details">
+      <div class="section">
+        <h3>Personal Information</h3>
         <div class="detail">
           <div class="label">Employee Number</div>
           <div class="value">{{employee?.uid || 'N/A'}}</div>
         </div>
         <div class="detail">
-          <div class="label">First Name</div>
-          <div class="value">{{employee?.firstName || 'N/A'}}</div>
-        </div>
-        <div class="detail">
-          <div class="label">Last Name</div>
-          <div class="value">{{employee?.lastName || 'N/A'}}</div>
-        </div>
-        <div class="detail">
           <div class="label">Date of Birth</div>
-          <div class="value">{{ employee?.dob ? (employee?.dob | date: "MM/dd/YYYY") :'N/A'}}  </div>
+          <div class="value">{{ employee?.dob ? (employee?.dob | date: "MM/dd/YYYY") :'N/A'}}</div>
         </div>
       </div>
-      <div class="employment-details">
-        <h2>Employment Information</h2>
+      <div class="section">
+        <h3>Employment Information</h3>
         <div class="detail">
           <div class="label">Joining Date</div>
           <div class="value">{{ employee?.joiningDate ? (employee.joiningDate | date: 'MM/dd/yyyy') : 'N/A' }}</div>
-
         </div>
         <div class="detail">
           <div class="label">Location</div>
-          <div class="value">{{employee.locationName || 'N/A'}}</div>
-        </div>
-        <div class="detail">
-          <div class="label">Job Title</div>
-          <div class="value">{{employee.roleName || 'N/A'}}</div>
+          <div class="value">{{employee?.locationName || 'N/A'}}</div>
         </div>
         <div class="detail">
           <div class="label">Department</div>
-          <div class="value">{{employee.departmentName || 'N/A'}}</div>
+          <div class="value">{{employee?.departmentName || 'N/A'}}</div>
         </div>
         <div class="detail">
           <div class="label">Assign Manager</div>
-          <div class="value">{{employee.managerName || 'N/A'}}</div>
+          <div class="value">{{employee?.managerName || 'N/A'}}</div>
         </div>
         <div class="detail">
           <div class="label">Assign Project</div>
-          <div class="value">{{employee.projectName || 'N/A'}}</div>
+          <div class="value">{{employee?.projectName || 'N/A'}}</div>
         </div>
       </div>
     </div>

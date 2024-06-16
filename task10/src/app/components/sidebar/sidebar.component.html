@@ -44,6 +44,7 @@
           <a
             class="sub-sec dashboard item unlocked"
             routerLink="/Dashboard"
+            routerLinkActive="active"
             #subSec
             (click)="toggleSubSecClass($event, 'dashboard')"
           >
@@ -68,6 +69,7 @@
           <a
             class="sub-sec employees item unlocked"
             routerLink="/Employees"
+            routerLinkActive="active"
             #subSec
             #subSecEmployees
             (click)="toggleSubSecClass($event, 'employees')"
@@ -95,8 +97,8 @@
               <ul id="departmentList">
                 @for(group of employeesGroupedByDepartment; track
                 group.departmentId) {
-                <li>
-                  <a href="#">
+                <li (click)="sortByDept(group.departmentId)">
+                  <a>
                     <div class="dept-details">
                       <div class="dept-names">
                         {{ getDepartmentNameById(group.departmentId) }}
@@ -105,7 +107,6 @@
                       <div class="employee-dept-count">
                         {{ group.employeesCount }}
                       </div>
-                      <!-- Hardcoded number of employees -->
                     </div>
                   </a>
                 </li>
@@ -125,6 +126,7 @@
         <a
           class="sub-sec roles item unlocked"
           routerLink="/Roles"
+          routerLinkActive="active"
           #subSec
           (click)="toggleSubSecClass($event, 'roles')"
         >
@@ -158,6 +160,7 @@
         <a
           class="sub-sec access-rights item unlocked"
           routerLink="/AccessUsers"
+          routerLinkActive="active"
           #subSec
           (click)="toggleSubSecClass($event, 'assignUser')"
         >

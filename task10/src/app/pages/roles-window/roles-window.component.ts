@@ -2,7 +2,6 @@ import { Component, inject } from '@angular/core';
 import { FilterBarComponent } from '../../components/filter-bar/filter-bar.component';
 import { ROLE_FILTER_CONFIG } from '../../config/role-filter.config';
 import { Dropdown } from '../../models/dropdown';
-import { LocalStorageService} from '../../services/local-storage.service';
 import { SharedService } from '../../services/shared.service';
 import { RoleCardComponent } from '../../components/role-card/role-card.component';
 import { Role } from '../../models/role';
@@ -10,6 +9,7 @@ import { createDefaultSelectedRolesFilter, SelectedRolesFilter } from '../../mod
 import { RolesService } from '../../services/roles.service';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
+import { ToasterService } from '../../services/toaster.service';
 
 @Component({
   selector: 'app-roles-window',
@@ -23,7 +23,7 @@ export class RolesWindowComponent {
   locationOptions: Dropdown[] = [];
   departmentOptions: Dropdown[] = [];
   rolesList: Role[] = [];
-  isLoading: boolean = false;
+  isRolesFetched: boolean = false;
 
   pageNumber: number = 1;
   pageSize: number = 6;
@@ -33,10 +33,10 @@ export class RolesWindowComponent {
 
   sharedService = inject(SharedService);
   roleService = inject(RolesService);
-  localStorageService = inject(LocalStorageService);
-
-
+  toast = inject(ToasterService);
+  
   ngOnInit(): void {
+    this.isRolesFetched = false;
     this.locationOptions = JSON.parse(localStorage.getItem('locationOptions') || '[]');
     this.departmentOptions = JSON.parse(localStorage.getItem('departmentOptions') || '[]');
 
@@ -55,26 +55,21 @@ export class RolesWindowComponent {
       this.pageSize = pageSize;
     });
 
-    this.sharedService.loadRoles();
-    this.sharedService.getRolesList().subscribe({
-      next: (data: Role[]) => {
-        this.rolesList = data;
-      },
-      error: (err) => {
-        console.log('Error fetching roles:', err);
-      },
-      complete: () => {
-        this.isLoading = false;
-      }
-    })
     this.sharedService.selectedRolesFilters$.subscribe(filters => {
       this.selectedRolesFilters = filters;
-
     });
-
-    this.sharedService.getLoadingStatus().subscribe({
-      next: (isLoading: boolean) => {
-        this.isLoading = isLoading;
+    
+    this.sharedService.loadRoles();
+    this.sharedService.roles$.subscribe({
+      next: (data) => {
+        this.rolesList = data;
+      },
+      error: () => {
+        
+      },
+      complete: () => {
+        console.log(this.rolesList)
+        this.isRolesFetched = true;
       }
     });
   }
@@ -82,12 +77,14 @@ export class RolesWindowComponent {
   changePage(pageNumber: number): void {
     this.sharedService.setPageNumber(pageNumber);
     this.sharedService.loadRoles(this.selectedRolesFilters);
+    this.isRolesFetched = true;
   }
 
   changePageSize(event: Event): void {
     const pageSize = (event.target as HTMLSelectElement).value;
     this.sharedService.setPageSize(Number(pageSize));
-    this.sharedService.loadRoles(this.selectedRolesFilters);
+    this.sharedService.loadRoles(this.selectedRolesFilters)
+    this.isRolesFetched = true;
   }
 
 }

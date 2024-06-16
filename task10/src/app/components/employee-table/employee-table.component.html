@@ -51,27 +51,18 @@
     </div>
   </div>
   <div class="table-container">
-    <div
-      *ngIf="isLoading && employeesList.length === 0"
-      class="loading-message"
-    >
-      Loading...
-    </div>
-    <table
-      *ngIf="!isLoading && employeesList.length > 0"
-      class="employees-table"
-      id="employeesTable"
-    >
+    <table class="employees-table" id="employeesTable">
       <thead>
         <tr>
           <th class="check-box-col">
             <input
               type="checkbox"
               (change)="selectAll($event)"
+              [checked]="isAllSelected()"
               id="all-checkbox"
             />
           </th>
-          <th class="col col-user">
+          <th class="col col-user" (click)="sortTable(1)">
             <div class="header-content">
               <span>USER</span>
               <span class="material-symbols-outlined sort-icon"
@@ -79,7 +70,7 @@
               >
             </div>
           </th>
-          <th class="col col-location">
+          <th class="col col-location" (click)="sortTable(2)">
             <div class="header-content">
               <span>LOCATION</span>
               <span class="material-symbols-outlined sort-icon"
@@ -87,7 +78,7 @@
               >
             </div>
           </th>
-          <th class="col col-department">
+          <th class="col col-department" (click)="sortTable(3)">
             <div class="header-content">
               <span>DEPARTMENT</span>
               <span class="material-symbols-outlined sort-icon"
@@ -95,7 +86,7 @@
               >
             </div>
           </th>
-          <th class="col col-role">
+          <th class="col col-role" (click)="sortTable(4)">
             <div class="header-content">
               <span>ROLE</span>
               <span class="material-symbols-outlined sort-icon"
@@ -103,7 +94,7 @@
               >
             </div>
           </th>
-          <th class="col col-emp-no">
+          <th class="col col-emp-no" (click)="sortTable(5)">
             <div class="header-content">
               <span>EMP NO</span>
               <span class="material-symbols-outlined sort-icon"
@@ -111,7 +102,7 @@
               >
             </div>
           </th>
-          <th class="col col-status">
+          <th class="col col-status" (click)="sortTable(6)">
             <div class="header-content">
               <span>STATUS</span>
               <span class="material-symbols-outlined sort-icon"
@@ -119,7 +110,7 @@
               >
             </div>
           </th>
-          <th class="col col-join-dt">
+          <th class="col col-join-dt" (click)="sortTable(7)">
             <div class="header-content">
               <span>JOIN DT</span>
               <span class="material-symbols-outlined sort-icon"
@@ -143,7 +134,11 @@
           </td>
           <td class="col col-user">
             <div class="profile-card emp-card">
-              <!-- <img alt="Employee Image" class="employee-img" /> -->
+              <img
+                alt="Employee Image"
+                class="employee-img"
+                [src]="getProfileImage(employee)"
+              />
               <div class="profile-details">
                 <p class="profile-name">
                   {{ employee.firstName || "N/A" }}
@@ -160,7 +155,12 @@
           <td class="col col-role">{{ employee.roleName || "N/A" }}</td>
           <td class="col col-emp-no">{{ employee.uid || "N/A" }}</td>
           <td class="col col-status">
-            <div class="btn-active">
+            <div
+              [ngClass]="{
+                'btn-active': employee.status,
+                'btn-inactive': !employee.status
+              }"
+            >
               {{ employee.status ? "Active" : "Inactive" }}
             </div>
           </td>
@@ -187,20 +187,15 @@
                   <a>View Details</a>
                 </li>
                 <li [routerLink]="['/Edit', employee.id]"><a>Edit</a></li>
-                <li>
-                  <a (click)="deleteEmployee(employee)">Delete</a>
-                </li>
+                <li (click)="deleteEmployee(employee)"><a>Delete</a></li>
               </ul>
             </div>
           </td>
         </tr>
       </tbody>
     </table>
-    <div
-      *ngIf="!isLoading && employeesList.length === 0"
-      class="empty-table-message active"
-    >
-      No employees found.
-    </div>
+  </div>
+  <div *ngIf="isEmployeesFetched && employeesList.length === 0" class="empty-table-message active">
+    No employees found.
   </div>
 </div>

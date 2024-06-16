@@ -1,0 +1,80 @@
+/* Role Description Container */
+.employee-card .profile-details {
+    margin-left: 0.5rem !important;
+    width: 100%;
+}
+
+.employee-card {
+    padding: 1rem;
+    width: 90%;
+    height: 100%;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    border: 2px solid #939dae61;
+}
+
+.employee-card:hover {
+    transform: scale(1.02);
+}
+
+.employee-card-name {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+}
+
+.employee-card-details {
+    margin: 0.3rem 0;
+    color: #676C72;
+    display: flex;
+    justify-content: space-between;
+}
+
+.employee-card-details .left {
+    display: flex;
+    justify-content: flex-start;
+    color: #676C72;
+}
+
+.employee-card-details img {
+    margin-right: 5px
+}
+
+.employee-card .profile-name {
+    color: black;
+    font-weight: bold;
+    margin-top: 0.5rem !important;
+    margin-bottom: 0.5rem !important;
+}
+
+.employee-card-details .left {
+    display: flex;
+    justify-content: flex-start;
+    color: #676C72;
+}
+
+.employee-card .profile-title {
+    margin: 0;
+    font-size: 1rem;
+    color: #676C72;
+}
+
+.employee-img {
+    width: 4rem;
+    height: 4rem;
+    border-radius: 50%;
+    border: 2px solid black;
+}
+
+.employee-card .profile-card {
+    margin: 0 !important;
+}
+
+.employee-card .emp-id img, .email-id img, .role-domain img, .role-location img {
+    margin-right: 1rem !important;
+}
+
+.right-arrow-icon{
+    cursor: pointer;
+}

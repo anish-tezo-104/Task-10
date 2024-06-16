@@ -1,0 +1,102 @@
+/* Modal Container */
+.modal-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+  z-index: 1000; /* Ensure it's on top of everything */
+}
+
+/* Modal Dialog */
+.modal-dialog {
+  max-width: 500px;
+  width: 100%;
+  background-color: #ffffff; /* White background */
+  border-radius: 8px;
+  overflow: hidden; /* Ensure rounded corners are visible */
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Box shadow for depth */
+}
+
+/* Modal Content */
+.modal-content {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Modal Header */
+.modal-header {
+  background-color: #f44848; /* Header background color */
+  color: white; /* Header text color */
+  padding: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid #dee2e6; /* Bottom border for separation */
+  border-radius: 8px 8px 0 0; /* Rounded top corners */
+}
+
+.modal-title {
+  margin: 0;
+}
+
+.close {
+  cursor: pointer;
+  background: none;
+  border: none;
+  font-size: 24px;
+  color: white;
+  outline: none;
+}
+
+.close:hover {
+  color: #ffffff88; /* Slightly transparent on hover */
+}
+
+/* Modal Body */
+.modal-body {
+  padding: 20px;
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+/* Modal Footer */
+.modal-footer {
+  background-color: #f9f9f9; /* Footer background color */
+  padding: 15px;
+  text-align: right;
+  border-top: 1px solid #dee2e6; /* Top border for separation */
+  border-radius: 0 0 8px 8px; /* Rounded bottom corners */
+}
+
+.btn {
+  cursor: pointer;
+  border-radius: 4px;
+  padding: 10px 20px;
+  margin-left: 8px;
+  outline: none;
+  border: none;
+  transition: background-color 0.3s ease;
+}
+
+.btn-primary {
+  background-color: #f44848; /* Primary button color */
+  color: white; /* Button text color */
+}
+
+.btn-primary:hover {
+  background-color: #f44848; /* Darker shade on hover */
+}
+
+.btn-secondary {
+  background-color: #6c757d; /* Secondary button color */
+  color: white; /* Button text color */
+}
+
+.btn-secondary:hover {
+  background-color: #5a6268; /* Darker shade on hover */
+}

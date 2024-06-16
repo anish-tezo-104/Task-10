@@ -1,0 +1,17 @@
+export enum ErrorCodes {
+    ERROR_OCCURRED = "Error Occurred",
+    UNKNOWN_ERROR = "Unknown Error",
+    FAILED_TO_EXPORT_CSV = "Failed to export CSV",
+    FAILED_TO_LOGIN = "Login Failed",
+    INVALID_CREDENTIALS = "Invalid Credentials!",
+    FAILED_TO_FETCH_EMPLOYEE = "Failed to fetch employee",
+    FAILED_TO_FETCH_EMPLOYEES = "Failed to fetch employee(s)",
+    FAILED_TO_FETCH_ROLE = "Failed to fetch role",
+    FAILED_TO_FETCH_ROLES = "Failed to fetch role(s)",
+    EMPLOYEE_ADDED_SUCCESS = "Employee Added Successfully",
+    FORM_INVALID = "Invalid Form !",
+    TRY_AGAIN = "Please Try Again.",
+    FILTERING_ERROR = "Error occurred while filtering.",
+    FAILED_TO_LOGOUT = "Failed to log out",
+    PLEASE_LOGIN = "Please Login",
+}

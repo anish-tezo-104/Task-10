@@ -1,15 +1,14 @@
-import { Component, ElementRef, inject, Input, OnDestroy, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
-import { Subscription } from 'rxjs';
+import { Component, ElementRef, inject, Input, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { SharedService } from '../../services/shared.service';
-import { DropdownsService } from '../../services/dropdowns.service';
 import { CommonModule } from '@angular/common';
 import { Dropdown } from '../../models/dropdown';
 import { Employee } from '../../models/employee';
-import { EmployeesService } from '../../services/employees.service';
 import { DepartmentEmployeeGroup } from '../../models/department-employee-group';
 import { Router, RouterModule } from '@angular/router';
-import { LocalStorageService } from '../../services/local-storage.service';
 
+import { ToasterService } from '../../services/toaster.service';
+import { EmployeesService } from '../../services/employees.service';
+import { ErrorCodes } from '../../enums/error-codes';
 
 @Component({
   selector: 'app-sidebar',
@@ -27,10 +26,10 @@ export class SidebarComponent implements OnInit {
     roles: false,
     assignUser: false
   };
-
-  constructor(private sharedService: SharedService, private router: Router) { }
   
-  localStorage = inject(LocalStorageService);
+
+  constructor(private sharedService: SharedService, private router: Router, private employeesService: EmployeesService) { }
+  toast = inject(ToasterService);
 
   @ViewChild('sidebar') sidebar!: ElementRef;
   @ViewChild('sidebarHandleIcon') sidebarHandleIcon!: ElementRef;
@@ -47,18 +46,8 @@ export class SidebarComponent implements OnInit {
     this.departments = JSON.parse(localStorage.getItem('departmentOptions') || '[]');
 
     this.sharedService.loadEmployeesGroupedByDepartment();
-    
-    this.sharedService.employeesGroupedByDepartment$.subscribe({
-      next: (data: DepartmentEmployeeGroup[]) => {
-        this.employeesGroupedByDepartment = data;
-        console.log(this.employeesGroupedByDepartment);
-      },
-      error: (err) => {
-        console.log(err);
-      },
-      complete: () => {
-        console.log("Employees grouped by department loaded successfully");
-      }
+    this.sharedService.employeesGroupedByDepartment$.subscribe(data => {
+      this.employeesGroupedByDepartment = data;
     });
   }
 
@@ -129,6 +118,17 @@ export class SidebarComponent implements OnInit {
         element.classList.add("active");
       }
     }
+  }
+
+  sortByDept(id: number): void {
+    this.employeesService.getEmployeesByDeptId(id).subscribe({
+      next: (employees: Employee[]) => {
+        this.sharedService.setEmployeesSubject(employees); 
+      },
+      error: () => {
+        this.toast.showErrorToaster(ErrorCodes.FILTERING_ERROR);
+      }
+    });
   }
 
   hideShowDepartmentListSidebar(check: boolean): void {

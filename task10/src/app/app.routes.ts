@@ -1,16 +1,19 @@
 import { Routes } from '@angular/router';
-import { HomeComponent } from './pages/home/home.component';
 import { authGuard } from './auth/auth.guard';
+import { LoginComponent } from './pages/login/login.component';
+import { authChildGuard } from './auth/auth-child.guard';
 
 export const routes: Routes = [
 
     {
         path: 'Login',
-        loadComponent: () => import('./pages/login/login.component').then(mod => mod.LoginComponent)
+        component: LoginComponent
     },
     {
         path: '',
-        component: HomeComponent,
+        loadComponent: () => import('./pages/home/home.component').then(mod => mod.HomeComponent),
+        canActivate: [authGuard],
+        canActivateChild: [authChildGuard],
         children: [
             {
                 path: 'Employees',
@@ -24,9 +27,20 @@ export const routes: Routes = [
             },
             {
                 path: 'Roles',
-                loadComponent: () => import('./pages/roles-window/roles-window.component').then(mod => mod.RolesWindowComponent),
-                canActivate: [authGuard]
+                canActivate: [authGuard],
+                canActivateChild: [authChildGuard],
+                children: [
+                    {
+                        path: '',
+                        loadComponent: () => import('./pages/roles-window/roles-window.component').then(mod => mod.RolesWindowComponent),
+                    },
+                    {
+                        path: ':roleId',
+                        loadComponent: () => import('./pages/view-roles-employees/view-roles-employees.component').then(mod => mod.ViewRolesEmployeesComponent),
+                    },
+                ]
             },
+
             {
                 path: 'AccessUsers',
                 loadComponent: () => import('./pages/access-rights-window/access-rights-window.component').then(mod => mod.AccessRightsWindowComponent),
@@ -51,7 +65,11 @@ export const routes: Routes = [
                 path: 'AddRole',
                 loadComponent: () => import('./components/role-form/role-form.component').then(mod => mod.RoleFormComponent),
                 canActivate: [authGuard]
-            },
+            }
         ]
+    },
+    {
+        path: '**',
+        redirectTo: 'Login'
     }
 ];

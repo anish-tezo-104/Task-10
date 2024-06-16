@@ -1,0 +1,39 @@
+/* Role Description Container */
+
+.roles-container-item {
+    width: 25rem;
+}
+
+.roles-desc-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    margin-right: .5rem;
+    margin-bottom: 1rem;
+    padding: 1rem 0 0 1rem;
+    z-index: 1;
+}
+
+.heading {
+    padding-top: 0;
+    margin-top: 10px;
+}
+
+.role-name {
+    font-weight: bold;
+    color: black;
+}
+
+.heading span{
+    cursor: pointer;
+    margin-left : 0 !important;
+}
+
+.roles-desc-page {
+    display: block;
+}
+
+.sub-heading {
+    line-height: 1.8rem !important;
+    text-align: justify !important;
+}

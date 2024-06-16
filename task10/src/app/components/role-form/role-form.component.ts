@@ -1,11 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { Dropdown } from '../../models/dropdown';
-import { LocalStorageService } from '../../services/local-storage.service';
 import { CommonModule } from '@angular/common';
 import { FormControl, FormGroup,  ReactiveFormsModule, Validators } from '@angular/forms'; 
 import { MobileNumberValidationDirective } from '../../directives/mobile-number-validation.directive';
 import {  Router } from '@angular/router';
 import { RolesService } from '../../services/roles.service';
+import { ToasterService } from '../../services/toaster.service';
+import { ErrorCodes } from '../../enums/error-codes';
+import { SuccessCodes } from '../../enums/success-codes';
 
 
 @Component({
@@ -21,15 +23,15 @@ export class RoleFormComponent implements OnInit {
   departmentOptions: Dropdown[] = [];
 
   constructor(
-    private localStorageService: LocalStorageService,
     private router: Router,
-    private roleService: RolesService
+    private roleService: RolesService,
+    private toast: ToasterService
   ) {
 
     this.roleForm = new FormGroup({
       roleName: new FormControl('', [Validators.required]),
       departmentId: new FormControl(null, [Validators.required]),
-      // description: new FormControl('', [Validators.required]),
+      description: new FormControl('', [Validators.maxLength(200)]),
       locationId : new FormControl(null, [Validators.required])
     })
   }
@@ -41,22 +43,21 @@ export class RoleFormComponent implements OnInit {
 
   handleRoleFormSubmit(): void {
     if (this.roleForm.valid) {
-
       const roleData = this.roleForm.getRawValue();
       this.roleService.addRole(roleData).subscribe({
         next: () => {
           this.roleForm.reset();
-          
         },
-        error: (error) => {
-          console.log(error);
+        error: (err) => {
+          this.toast.showErrorToaster(err);
         },
         complete: () => {
+          this.toast.showSuccessToaster(`${SuccessCodes.ADD_ROLE_SUCCESS}`);
           this.router.navigate(['/Roles']);
         }
       })
     } else {
-      console.log("Form is invalid");
+      this.toast.showWarningToaster("Invalid Details!");
     }
   }
 

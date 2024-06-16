@@ -1,7 +1,7 @@
 import { Component, ElementRef, inject, Input, OnInit, Output, QueryList, SimpleChanges, ViewChild, ViewChildren } from '@angular/core';
-import { LocalStorageService } from '../../services/local-storage.service';
+
 import { CommonModule } from '@angular/common';
-import {  createDefaultSelectedEmployeesFilter, SelectedEmployeesFilter } from '../../models/selected-employees-filter';
+import { createDefaultSelectedEmployeesFilter, SelectedEmployeesFilter } from '../../models/selected-employees-filter';
 import { SharedService } from '../../services/shared.service';
 import { AlphabetFilterComponent } from '../alphabet-filter/alphabet-filter.component';
 import { FILTER_CONFIG } from '../../config/filter-config';
@@ -20,7 +20,7 @@ import { createDefaultSelectedRolesFilter, SelectedRolesFilter } from '../../mod
 export class FilterBarComponent implements OnInit {
     @Input() dropdowns: FilterDropdownConfig[] = [];
     @Input() isDisabled: boolean = true;
-    @Input() selectedFilters: SelectedEmployeesFilter | SelectedRolesFilter | undefined ;
+    @Input() selectedFilters: SelectedEmployeesFilter | SelectedRolesFilter | undefined;
 
     filters: Filter[] = FILTER_CONFIG;
 
@@ -39,9 +39,9 @@ export class FilterBarComponent implements OnInit {
     @ViewChild('locationBtnDiv') locationBtnDiv!: ElementRef<HTMLButtonElement>;
     @ViewChildren('filterBtn') filterBtns!: QueryList<ElementRef<HTMLButtonElement>>;
     @ViewChildren('dropdownContent') dropdownContents!: QueryList<ElementRef<HTMLDivElement>>;
-    @ViewChild('alphabetFilter') alphabetFilter!: ElementRef<any>;
+    @ViewChild(AlphabetFilterComponent) alphabetFilter!: AlphabetFilterComponent;
 
-    constructor(private localStorageService: LocalStorageService) {
+    constructor() {
     }
 
     sharedService = inject(SharedService);
@@ -55,7 +55,7 @@ export class FilterBarComponent implements OnInit {
 
         if (this.isRoleFilter(this.selectedFilters)) {
             this.selectedFilters = this.sharedService.getSelectedRolesFilters();
-            
+
         } else if (this.isEmployeeFilter(this.selectedFilters)) {
             this.selectedFilters = this.sharedService.getSelectedEmployeesFilters();
         }
@@ -79,6 +79,15 @@ export class FilterBarComponent implements OnInit {
 
         this.sharedService.pageSize$.subscribe(pageSize => {
             this.pageSize = pageSize;
+        });
+
+        this.sharedService.alphabetActive$.subscribe(active => {
+            if (this.btnReset.nativeElement) {
+                this.btnReset.nativeElement.disabled = !active;
+            }
+            if (this.btnApply.nativeElement) {
+                this.btnApply.nativeElement.disabled = !active;
+            }
         });
     }
 
@@ -149,7 +158,7 @@ export class FilterBarComponent implements OnInit {
         }
     }
 
-   resetFilter(): void {
+    resetFilter(): void {
         if (this.isEmployeeFilter(this.selectedFilters)) {
             this.sharedService.resetEmployeesFilters();
         } else if (this.isRoleFilter(this.selectedFilters)) {
@@ -158,7 +167,9 @@ export class FilterBarComponent implements OnInit {
         this.sharedService.triggerAlphabetReset();
         this.sharedService.loadEmployees();
 
-        const shouldDisable = this.sharedService.disableButtons(this.selectedFilters!);
+        const shouldDisable = !this.alphabetFilter.isFilterApplied() &&
+            this.sharedService.disableButtons(this.selectedFilters!);
+
         this.sharedService.setBtnResetState(shouldDisable);
         this.sharedService.setBtnApplyState(shouldDisable);
 
@@ -166,7 +177,7 @@ export class FilterBarComponent implements OnInit {
     }
 
     applyFilter(): void {
-        
+
         this.sharedService.setPageNumber(1);
         if (this.isEmployeeFilter(this.selectedFilters)) {
             this.sharedService.setSelectedEmployeesFilters(this.selectedFilters);
@@ -175,6 +186,13 @@ export class FilterBarComponent implements OnInit {
             this.sharedService.setSelectedRolesFilters(this.selectedFilters);
             this.sharedService.loadRoles(this.selectedFilters);
         }
+
+        const shouldDisable = !this.alphabetFilter.isFilterApplied() &&
+            this.sharedService.disableButtons(this.selectedFilters!);
+
+        this.sharedService.setBtnResetState(shouldDisable);
+        this.sharedService.setBtnApplyState(shouldDisable);
+
         this.sharedService.updateButtonStates(this.selectedFilters!);
     }
 

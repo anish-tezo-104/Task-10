@@ -20,7 +20,7 @@ import { ConfirmationDialogService } from '../confirmation-dialog/confirmation-d
 })
 export class EmployeeTableComponent {
   @Input() employeesList: Employee[] = [];
-  @Input() isEmployeesFetched: boolean = false;
+  @Input() isEmployeesFetched: boolean = true;
   openEmployeeId: number | null = null;
   selectedEmployees: number[] = [];
   pageNumber: number = 1;
@@ -62,6 +62,8 @@ export class EmployeeTableComponent {
   changePage(pageNumber: number): void {
     this.sharedService.setPageNumber(pageNumber);
     this.sharedService.loadEmployees(this.selectedFilters);
+    this.updateEmployeesList();
+    this.isEmployeesFetched = true;
   }
 
 
@@ -69,6 +71,20 @@ export class EmployeeTableComponent {
     const pageSize = (event.target as HTMLSelectElement).value;
     this.sharedService.setPageSize(Number(pageSize));
     this.sharedService.loadEmployees(this.selectedFilters);
+    this.updateEmployeesList();
+    this.isEmployeesFetched = true;
+  }
+
+  updateEmployeesList(): void {
+    this.sharedService.employees$.subscribe({
+      next: (data) => {
+        this.isEmployeesFetched = false;
+        this.employeesList = data;
+      },
+      complete: () => {
+        this.isEmployeesFetched = true;
+      }
+    })
   }
 
   toggleMenu(employeeId: number): void {
@@ -141,7 +157,7 @@ export class EmployeeTableComponent {
     }
     this.checkSelectAllState();
   }
-  
+
 
   isEmployeeSelected(employeeId: number): boolean {
     return this.selectedEmployees.includes(employeeId);
@@ -193,14 +209,14 @@ export class EmployeeTableComponent {
 
   getColumnValue(row: any, column_number: number): any {
     switch (column_number) {
-      case 1: return `${row.firstName || ''} ${row.lastName || ''}`.toLowerCase(); 
-      case 2: return (row.locationName || '').toLowerCase(); 
-      case 3: return (row.departmentName || '').toLowerCase(); 
-      case 4: return (row.roleName || '').toLowerCase(); 
+      case 1: return `${row.firstName || ''} ${row.lastName || ''}`.toLowerCase();
+      case 2: return (row.locationName || '').toLowerCase();
+      case 3: return (row.departmentName || '').toLowerCase();
+      case 4: return (row.roleName || '').toLowerCase();
       case 5: return row.uid || '';
-      case 6: return row.status ? 1 : 0; 
-      case 7: return new Date(row.joiningDate).getTime(); 
-      default: return ''; 
+      case 6: return row.status ? 1 : 0;
+      case 7: return new Date(row.joiningDate).getTime();
+      default: return '';
     }
   }
 }

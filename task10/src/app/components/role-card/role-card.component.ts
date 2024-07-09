@@ -13,8 +13,4 @@ import { RouterModule } from '@angular/router';
 export class RoleCardComponent {
 
   @Input() role!: Role;
-
-  openRoleDescription(): void {
-    console.log("View Employees");
-  }
 }

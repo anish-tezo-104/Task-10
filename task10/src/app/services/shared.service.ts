@@ -188,7 +188,6 @@ export class SharedService {
   }
 
   setEmployeesSubject(employees: Employee[]): void {
-    console.log(employees);
     this.employeesSubject.next(employees);
   }
 

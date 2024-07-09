@@ -68,7 +68,6 @@ export class RolesWindowComponent {
         
       },
       complete: () => {
-        console.log(this.rolesList)
         this.isRolesFetched = true;
       }
     });

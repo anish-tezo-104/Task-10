@@ -36,7 +36,7 @@ export class EmployeeFormComponent implements OnInit {
   formData: FormData;
   imagePreview: any = '../assets/default-user.png'
   isDataFetched: boolean = false;
-  
+
 
   constructor(
     private dropdownsService: DropdownsService,
@@ -155,6 +155,40 @@ export class EmployeeFormComponent implements OnInit {
 
   }
 
+  validForm(): boolean {
+    return this.employeeForm.valid;
+  }
+
+  onDepartmentChange(event: any): void {
+    const departmentId = parseInt(event.target.value);
+    if (departmentId) {
+      this.departmentSelected = true;
+      this.employeeForm.controls['roleId'].enable();
+      this.filterRolesByDepartment(departmentId);
+    } else {
+      this.departmentSelected = false;
+      this.employeeForm.controls['roleId'].disable();
+      this.filteredRolesOptions = [];
+    }
+  }
+
+  filterRolesByDepartment(departmentId: number): void {
+
+    this.filteredRolesOptions = this.rolesOptions.filter(role => role.departmentId === departmentId);
+    if (this.filteredRolesOptions.length === 0) {
+      this.departmentSelected = false;
+      this.employeeForm.controls['roleId'].setValue(null);
+    }
+  }
+
+  onCancelForm(): void {
+    this.employeeForm.reset();
+    this.employeeForm.controls['roleId'].disable();
+    this.departmentSelected = false;
+    this.filteredRolesOptions = [];
+    this.newFileSelected = false;
+  }
+
   private handleEditEmployee(employeeData: any): void {
     const editedData: any = {};
     for (const key in employeeData) {
@@ -165,10 +199,10 @@ export class EmployeeFormComponent implements OnInit {
         editedData[key] = employeeData[key];
       }
     }
+
     if (Object.keys(editedData).length > 0 || this.selectedFile) {
-      this.employeesService.editEmployee(this.employeeId!, editedData, this.selectedFile).subscribe({
-        next: () => {
-        },
+      this.employeesService.editEmployee(this.employeeId!, this.editEmployee, editedData, this.selectedFile).subscribe({
+        next: () => { },
         error: (err) => {
           this.toast.showErrorToaster(err);
         },
@@ -205,39 +239,4 @@ export class EmployeeFormComponent implements OnInit {
       this.toast.showWarningToaster(ErrorCodes.FORM_INVALID, ErrorCodes.TRY_AGAIN);
     }
   }
-
-  validForm(): boolean {
-    return this.employeeForm.valid;
-  }
-
-  onDepartmentChange(event: any): void {
-    const departmentId = parseInt(event.target.value);
-    if (departmentId) {
-      this.departmentSelected = true;
-      this.employeeForm.controls['roleId'].enable();
-      this.filterRolesByDepartment(departmentId);
-    } else {
-      this.departmentSelected = false;
-      this.employeeForm.controls['roleId'].disable();
-      this.filteredRolesOptions = [];
-    }
-  }
-
-  filterRolesByDepartment(departmentId: number): void {
-
-    this.filteredRolesOptions = this.rolesOptions.filter(role => role.departmentId === departmentId);
-    if (this.filteredRolesOptions.length === 0) {
-      this.departmentSelected = false;
-      this.employeeForm.controls['roleId'].setValue(null);
-    }
-  }
-
-  onCancelForm(): void {
-    this.employeeForm.reset();
-    this.employeeForm.controls['roleId'].disable();
-    this.departmentSelected = false;
-    this.filteredRolesOptions = [];
-    this.newFileSelected = false;
-  }
-
 }

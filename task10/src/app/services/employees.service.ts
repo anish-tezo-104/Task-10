@@ -134,7 +134,6 @@ export class EmployeesService {
     params = params.append('RoleId', id.toString());
 
     const url = `${environment.API_URL}/Api/Employees?${params.toString()}`
-    console.log(url);
     return this.http.get<any>(url).pipe(
       map(response => {
         if (response.status === 'SUCCESS') {
@@ -255,20 +254,40 @@ export class EmployeesService {
     );
   }
 
-  editEmployee(id: number, employee: EditEmployee, profileImage: File | null): Observable<any> {
+  editEmployee(id: number, originalEmployee: any, updatedEmployee: any, profileImage: File | null): Observable<any> {
     const formData: FormData = new FormData();
-    formData.append('employeeData', JSON.stringify(employee));
+    const patchDocument: any[] = this.createPatchDocument(originalEmployee, updatedEmployee);
+    formData.append('patchEmployee', JSON.stringify(patchDocument));
+
     if (profileImage) {
       formData.append('profileImage', profileImage, profileImage.name);
     }
-    return this.http.put<any>(`${environment.API_URL}/Api/Employees/${id}`, formData).pipe(
+
+    return this.http.patch<any>(`${environment.API_URL}/Api/Employees/${id}`, formData).pipe(
       map(response => {
         if (response.status === 'SUCCESS') {
           return response.data;
         } else {
           throw new Error(`${response.statusCode} ${response.errorCode}`);
         }
+      }),
+      catchError(error => {
+        throw new Error('Failed to update employee.');
       })
     );
+  }
+
+  private createPatchDocument(original: any, updated: any): any[] {
+    const patchDocument: any[] = [];
+
+    for (const key in updated) {
+      if (updated.hasOwnProperty(key) && original.hasOwnProperty(key)) {
+        if (updated[key] !== original[key]) {
+          patchDocument.push({ op: 'replace', path: `/${key}`, value: updated[key] });
+        }
+      }
+    }
+
+    return patchDocument;
   }
 }
